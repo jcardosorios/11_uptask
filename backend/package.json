@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "author": "Joaquin Rios Cardoso",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
