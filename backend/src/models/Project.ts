@@ -1,9 +1,12 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document, Types, PopulatedDoc } from "mongoose";
+import { ITask } from "./Task";
 
-export type ProjectType = Document & {
+
+export interface IProject extends Document {
     projectName: string
     clientName: string
     description: string
+    tasks: PopulatedDoc<ITask & Document>[]
     isDeleted: boolean
     deletedAt: Date | null
 }
@@ -24,9 +27,15 @@ const ProjectSchema: Schema = new Schema({
         required: true,
         trim: true
     },
+    tasks: [
+        {
+            type: Types.ObjectId,
+            ref: 'Task'
+        }
+    ],
     isDeleted: { type: Boolean, default: false }, // Campo de borrado lógico
     deletedAt: { type: Date, default: null }      // Fecha de eliminación
-})
+}, { timestamps: true })
 
-const Project = mongoose.model<ProjectType>('Project', ProjectSchema)
+const Project = mongoose.model<IProject>('Project', ProjectSchema)
 export default Project
