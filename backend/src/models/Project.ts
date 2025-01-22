@@ -4,6 +4,8 @@ export type ProjectType = Document & {
     projectName: string
     clientName: string
     description: string
+    isDeleted: boolean
+    deletedAt: Date | null
 }
 
 const ProjectSchema: Schema = new Schema({
@@ -21,7 +23,9 @@ const ProjectSchema: Schema = new Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    isDeleted: { type: Boolean, default: false }, // Campo de borrado lógico
+    deletedAt: { type: Date, default: null }      // Fecha de eliminación
 })
 
 const Project = mongoose.model<ProjectType>('Project', ProjectSchema)
