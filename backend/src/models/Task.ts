@@ -16,6 +16,8 @@ export interface ITask extends Document {
     description: string
     project: Types.ObjectId
     status: TaskStatus
+    isDeleted: boolean
+    deletedAt: Date | null
 }
 
 const TaskSchema: Schema = new Schema({
@@ -39,7 +41,9 @@ const TaskSchema: Schema = new Schema({
         type: String,
         enum: Object.values(taskStatus),
         default: taskStatus.PEDING
-    }
+    },
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null }
 }, {timestamps: true})
 
 const Task = mongoose.model<ITask>('Task', TaskSchema)

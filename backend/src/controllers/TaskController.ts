@@ -4,8 +4,8 @@ import Task from '../models/Task'
 export class TaksController {
     static createTask = async (req : Request, res: Response) => {
         
+        const { project } = req
         try {
-            const { project } = req
             const task = new Task(req.body)
 
             task.project = project.id
@@ -20,12 +20,33 @@ export class TaksController {
     }
 
     static getAllTasks = async (req : Request, res: Response) => {
+        const { project } = req
         try {
-            const { project } = req
             const tasks = await Task.find({
                 project: project.id
             }).populate('project')
             res.json({data: tasks})
+        } catch (error) {
+            res.status(500).json({ errors: 'There was an error'})
+        }
+    }
+
+    static getTaskByID = async (req : Request, res: Response) => {
+        const { taskId } = req.params
+        try {
+            const task = await Task.findById(taskId).populate('project')
+            if (!task || task.isDeleted){
+                const error = new Error('Task not found')
+                res.status(404).json({errors: [error.message]})
+                return
+            }
+
+            if(task.project.toString() !== req.project.id){
+                const error = new Error('Invalid action')
+                res.status(400).json({errors: [error.message]})
+                return
+            }
+            res.json({ data: task})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }

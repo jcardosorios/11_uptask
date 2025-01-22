@@ -33,8 +33,8 @@ const ProjectSchema: Schema = new Schema({
             ref: 'Task'
         }
     ],
-    isDeleted: { type: Boolean, default: false }, // Campo de borrado lógico
-    deletedAt: { type: Date, default: null }      // Fecha de eliminación
+    isDeleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null }
 }, { timestamps: true })
 
 const Project = mongoose.model<IProject>('Project', ProjectSchema)
