@@ -25,18 +25,21 @@ router.get('/',
     ProjectController.getAllProjects
 )
 // Project Validation Middlewares
+router.param('projectId',
+    param('projectId').isMongoId().withMessage('Invalid ID')
+)
+router.param('projectId',
+    handleInputErrors
+)
 router.param('projectId', projectExist)
 
 // Get one project by ID
-router.get('/:id', 
-    param('id').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
+router.get('/:projectId', 
     ProjectController.getProjectByID
 )
 
 // Update project
-router.put('/:id', 
-    param('id').isMongoId().withMessage('ID no válido'),
+router.put('/:projectId', 
     body('projectName')
         .notEmpty().withMessage('Project name is required'),
     body('clientName')
@@ -48,16 +51,12 @@ router.put('/:id',
 )
 
 // Delete project
-router.delete('/:id', 
-    param('id').isMongoId().withMessage('ID no válido'),
-    handleInputErrors,
+router.delete('/:projectId', 
     ProjectController.deleteProject
 )
 
 // Soft Delete project
-router.patch('/:id', 
-    param('id').isMongoId().withMessage('ID no válido'),
-    handleInputErrors,
+router.patch('/:projectId', 
     ProjectController.softDeleteProject
 )
 

@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 import Project from '../models/Project'
 import { restart } from 'pm2'
+import { handleError } from '../utils'
 
 export class ProjectController {  
     static createProject = async (req : Request, res: Response) => {
@@ -10,7 +11,7 @@ export class ProjectController {
             // await Project.create(req.body)
             res.send('Project succesfully created')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to create the project")
         }
     }
 
@@ -21,7 +22,7 @@ export class ProjectController {
             })
             res.send(projects)
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to fetch projects")
         }
     }
 
@@ -30,7 +31,7 @@ export class ProjectController {
         try {
             res.send(project)
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to fetch the project")
         }
     }
     
@@ -44,7 +45,7 @@ export class ProjectController {
             await project.save()
             res.send('Project Updated')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to update the project")
         }
     }
     
@@ -57,7 +58,7 @@ export class ProjectController {
             await project.save()
             res.send('Project Deleted')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to delete the project")
         }
     }
 
@@ -67,7 +68,7 @@ export class ProjectController {
             await project.deleteOne()
             res.send('Project Deleted')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to delete the project")
         }
     }
     

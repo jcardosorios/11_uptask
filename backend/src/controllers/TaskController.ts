@@ -1,5 +1,6 @@
 import type { Request, Response} from 'express'
 import Task from '../models/Task'
+import { handleError } from '../utils'
 
 export class TaksController {
     static createTask = async (req : Request, res: Response) => {
@@ -13,9 +14,9 @@ export class TaksController {
 
             await Promise.allSettled([task.save(), project.save()])
 
-            res.send('Task succesfully created')
+            res.status(201).send('Task succesfully created')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to create the task")
         }
     }
 
@@ -28,7 +29,7 @@ export class TaksController {
             }).populate('project')
             res.send(tasks)
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to fetch tasks")
         }
     }
 
@@ -37,7 +38,7 @@ export class TaksController {
         try {
             res.send(task)
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to fetch the task")
         }
     }
 
@@ -50,7 +51,7 @@ export class TaksController {
             
             res.send('Task Successfully Updated')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to update the task")
         }
     }
 
@@ -67,7 +68,7 @@ export class TaksController {
             
             res.send('Task Successfully Deleted')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to delete the task")
         }
     }
 
@@ -80,7 +81,7 @@ export class TaksController {
             
             res.send('Task Successfully Deleted')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to delete the task")
         }
     }
 
@@ -94,7 +95,7 @@ export class TaksController {
             
             res.send('Status Successfully Updated')
         } catch (error) {
-            res.status(500).json({ errors: 'There was an error'})
+            handleError(res, error, "Failed to update the task status")
         }
     }
 }

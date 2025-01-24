@@ -15,8 +15,13 @@ export async function projectExist(req: Request, res: Response, next: NextFuncti
         // Search existing project
         const project = await Project.findById(projectId)
         if (!project || project.isDeleted){
-            const error = new Error('Project not found')
-            res.status(404).json({errors: [error.message]})
+            res.status(404).json({errors: [{
+                type: "field",
+                value: projectId,
+                msg: 'Project not found',
+                path: "projectId",
+                location: "params"
+            }]})
             return
         }
 
@@ -24,6 +29,6 @@ export async function projectExist(req: Request, res: Response, next: NextFuncti
         
         next()
     } catch (error) {
-        res.json({ errors: 'There was an error validating the project: ', error})
+        next(error)
     }
 }
