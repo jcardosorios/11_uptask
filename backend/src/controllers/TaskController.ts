@@ -116,17 +116,39 @@ export class TaksController {
                 res.status(404).json({errors: [error.message]})
                 return
             }
-            if(task.project._id.toString() !== req.project.id){
+            if(task.project._id.toString() !== project.id){
                 const error = new Error('Invalid action')
                 res.status(400).json({errors: [error.message]})
                 return
             }
-            req.project.tasks = req.project.tasks.filter( task => task._id.toString() !== taskId)
+            project.tasks = project.tasks.filter( task => task._id.toString() !== taskId)
 
 
-            await Promise.allSettled([task.deleteOne(), req.project.save()])
+            await Promise.allSettled([task.deleteOne(), project.save()])
             
             res.json({ data: 'Task Successfully Deleted'})
+        } catch (error) {
+            res.status(500).json({ errors: 'There was an error'})
+        }
+    }
+
+    static updateStatus = async (req : Request, res: Response) => {
+        const { taskId } = req.params
+        
+        try {
+            const task = await Task.findById(taskId)
+
+            if (!task || task.isDeleted){
+                const error = new Error('Task not found')
+                res.status(404).json({errors: [error.message]})
+                return
+            }
+
+            const { status } = req.body
+            task.status = status
+            await task.save()
+            
+            res.json({ data: 'Status Successfully Updated'})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
