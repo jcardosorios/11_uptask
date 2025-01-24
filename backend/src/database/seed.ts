@@ -60,36 +60,36 @@ const seedDatabase = async () => {
         console.log('Projects seeded');
         // console.log('Projects seeded:', projects);
 
-        const tasks: IDraftTask[]  = [];
         for (const project of projects) {
+            const tasks: IDraftTask[]  = [];
             
-        tasks.push({
-                taskName: 'Initial Planning',
-                description: `Plan the ${project.projectName}`,
+            tasks.push({
+                    taskName: 'Initial Planning',
+                    description: `Plan the ${project.projectName}`,
+                    project: project._id as Types.ObjectId,
+            })
+
+            tasks.push({
+                taskName: 'Design',
+                description: `Create designs for the ${project.projectName}`,
                 project: project._id as Types.ObjectId,
-        })
+            })
 
-        tasks.push({
-            taskName: 'Design',
-            description: `Create designs for the ${project.projectName}`,
-            project: project._id as Types.ObjectId,
-        })
-
-        tasks.push({
-            taskName: 'Development',
-            description: `Develop the core features for the ${project.projectName}`,
-            project: project._id as Types.ObjectId,
-        })
+            tasks.push({
+                taskName: 'Development',
+                description: `Develop the core features for the ${project.projectName}`,
+                project: project._id as Types.ObjectId,
+            })
 
       
-        const tasksCreated =await Task.insertMany(tasks)
-        for (const task of tasksCreated){
-            project.tasks.push(task._id as Types.ObjectId)
-            await project.save()
+            const tasksCreated =await Task.insertMany(tasks)
+            for (const task of tasksCreated){
+                project.tasks.push(task._id as Types.ObjectId)
+                await project.save()
+            }
         }
-    }
 
-    console.log('Tasks seeded');
+        console.log('Tasks seeded');
         
     } catch (error) {
         console.log(error)

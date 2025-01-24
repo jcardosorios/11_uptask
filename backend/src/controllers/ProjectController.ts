@@ -56,7 +56,7 @@ export class ProjectController {
         }
     }
     
-    static deleteProject = async (req : Request, res: Response) => {
+    static softDeleteProject = async (req : Request, res: Response) => {
         const { id } = req.params
         try {
             const project = await Project.findByIdAndUpdate(
@@ -68,7 +68,23 @@ export class ProjectController {
                 res.status(404).json({errors: [error.message]})
                 return
             }
-            project.save()
+            await project.save()
+            res.json({data:'Project Deleted'})
+        } catch (error) {
+            res.status(500).json({ errors: 'There was an error'})
+        }
+    }
+
+    static deleteProject = async (req : Request, res: Response) => {
+        const { id } = req.params
+        try {
+            const project = await Project.findById(id)
+            if (!project || project.isDeleted){
+                const error = new Error('Project not found')
+                res.status(404).json({errors: [error.message]})
+                return
+            }
+            await project.deleteOne()
             res.json({data:'Project Deleted'})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
