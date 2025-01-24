@@ -33,19 +33,8 @@ export class TaksController {
     }
 
     static getTaskByID = async (req : Request, res: Response) => {
-        const { taskId } = req.params
+        const { task } = req
         try {
-            const task = await Task.findById(taskId).populate('project')
-            if (!task || task.isDeleted){
-                const error = new Error('Task not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
-            if(task.project._id.toString() !== req.project.id){
-                const error = new Error('Invalid action')
-                res.status(400).json({errors: [error.message]})
-                return
-            }
             res.json({ data: task})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
@@ -53,19 +42,8 @@ export class TaksController {
     }
 
     static updateTask = async (req : Request, res: Response) => {
-        const { taskId } = req.params
+        const { task } = req
         try {
-            const task = await Task.findById(taskId)
-            if (!task || task.isDeleted){
-                const error = new Error('Task not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
-            if(task.project._id.toString() !== req.project.id){
-                const error = new Error('Invalid action')
-                res.status(400).json({errors: [error.message]})
-                return
-            }
             task.taskName = req.body.taskName
             task.description = req.body.description
             await task.save()
@@ -77,22 +55,10 @@ export class TaksController {
     }
 
     static softDeleteTask = async (req : Request, res: Response) => {
-        const { project } = req
-        const { taskId } = req.params
-        try {
-            const task = await Task.findById(taskId)
+        const { project, task } = req
 
-            if (!task || task.isDeleted){
-                const error = new Error('Task not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
-            if(task.project._id.toString() !== req.project.id){
-                const error = new Error('Invalid action')
-                res.status(400).json({errors: [error.message]})
-                return
-            }
-            project.tasks = project.tasks.filter( task => task._id.toString() !== taskId)
+        try {
+            project.tasks = project.tasks.filter( mappedTask => mappedTask._id.toString() !== task._id.toString())
             
             task.isDeleted = true;
             task.deletedAt = new Date();
@@ -106,24 +72,10 @@ export class TaksController {
     }
 
     static deleteTask = async (req : Request, res: Response) => {
-        const { project } = req
-        const { taskId } = req.params
+        const { project, task } = req
+
         try {
-            const task = await Task.findById(taskId)
-
-            if (!task || task.isDeleted){
-                const error = new Error('Task not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
-            if(task.project._id.toString() !== project.id){
-                const error = new Error('Invalid action')
-                res.status(400).json({errors: [error.message]})
-                return
-            }
-            project.tasks = project.tasks.filter( task => task._id.toString() !== taskId)
-
-
+            project.tasks = project.tasks.filter( mappedTask => mappedTask._id.toString() !== task._id.toString())
             await Promise.allSettled([task.deleteOne(), project.save()])
             
             res.json({ data: 'Task Successfully Deleted'})
@@ -133,18 +85,10 @@ export class TaksController {
     }
 
     static updateStatus = async (req : Request, res: Response) => {
-        const { taskId } = req.params
+        const { task } = req
+        const { status } = req.body
         
         try {
-            const task = await Task.findById(taskId)
-
-            if (!task || task.isDeleted){
-                const error = new Error('Task not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
-
-            const { status } = req.body
             task.status = status
             await task.save()
             

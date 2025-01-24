@@ -9,7 +9,7 @@ declare global {
     }
 }
 
-export async function validateProjectExist(req: Request, res: Response, next: NextFunction){
+export async function projectExist(req: Request, res: Response, next: NextFunction){
     try {
         const { projectId } = req.params
         // Search existing project
@@ -24,6 +24,6 @@ export async function validateProjectExist(req: Request, res: Response, next: Ne
         
         next()
     } catch (error) {
-        res.status(500).json({ errors: 'There was an error validating the project'})
+        res.json({ errors: 'There was an error validating the project: ', error})
     }
 }
