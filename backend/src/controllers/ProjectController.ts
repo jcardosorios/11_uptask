@@ -26,14 +26,8 @@ export class ProjectController {
     }
 
     static getProjectByID = async (req : Request, res: Response) => {
-        const { id } = req.params
+        const { project } = req
         try {
-            const project = await Project.findById(id).populate('tasks')
-            if (!project || project.isDeleted){
-                const error = new Error('Project not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
             res.json({ data: project})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
@@ -41,14 +35,12 @@ export class ProjectController {
     }
     
     static updateProject = async (req : Request, res: Response) => {
-        const { id } = req.params
+        const { project } = req
         try {
-            const project = await Project.findByIdAndUpdate(id, req.body)
-            if (!project || project.isDeleted){
-                const error = new Error('Project not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
+            project.projectName = req.body.projectName
+            project.clientName = req.body.clientName
+            project.description = req.body.description
+
             await project.save()
             res.json({data:'Project Updated'})
         } catch (error) {
@@ -57,17 +49,11 @@ export class ProjectController {
     }
     
     static softDeleteProject = async (req : Request, res: Response) => {
-        const { id } = req.params
+        const { project } = req
         try {
-            const project = await Project.findByIdAndUpdate(
-                id,
-                {isDeleted: true, deletedAt: new Date()}
-            )
-            if (!project || project.isDeleted){
-                const error = new Error('Project not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
+            project.isDeleted = true
+            project.deletedAt = new Date()
+
             await project.save()
             res.json({data:'Project Deleted'})
         } catch (error) {
@@ -76,14 +62,8 @@ export class ProjectController {
     }
 
     static deleteProject = async (req : Request, res: Response) => {
-        const { id } = req.params
+        const { project } = req
         try {
-            const project = await Project.findById(id)
-            if (!project || project.isDeleted){
-                const error = new Error('Project not found')
-                res.status(404).json({errors: [error.message]})
-                return
-            }
             await project.deleteOne()
             res.json({data:'Project Deleted'})
         } catch (error) {

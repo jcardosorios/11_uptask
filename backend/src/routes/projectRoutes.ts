@@ -8,6 +8,7 @@ import { taskBelongsToProject, taskExist } from '../middleware/task'
 
 const router = Router()
 
+// Create Project
 router.post('/',
     body('projectName')
         .notEmpty().withMessage('Project name is required'),
@@ -18,13 +19,22 @@ router.post('/',
     handleInputErrors,
     ProjectController.createProject
 )
-router.get('/', ProjectController.getAllProjects)
+
+// Get All Projects
+router.get('/', 
+    ProjectController.getAllProjects
+)
+// Project Validation Middlewares
+router.param('projectId', projectExist)
+
+// Get one project by ID
 router.get('/:id', 
     param('id').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
     ProjectController.getProjectByID
 )
 
+// Update project
 router.put('/:id', 
     param('id').isMongoId().withMessage('ID no válido'),
     body('projectName')
@@ -37,11 +47,20 @@ router.put('/:id',
     ProjectController.updateProject
 )
 
+// Delete project
 router.delete('/:id', 
     param('id').isMongoId().withMessage('ID no válido'),
     handleInputErrors,
     ProjectController.deleteProject
 )
+
+// Soft Delete project
+router.patch('/:id', 
+    param('id').isMongoId().withMessage('ID no válido'),
+    handleInputErrors,
+    ProjectController.softDeleteProject
+)
+
 
 /* Routes for tasks */
 router.param('projectId', projectExist)
@@ -61,6 +80,7 @@ router.get('/:projectId/tasks',
     TaksController.getAllTasks
 )
 
+// Task Validation Middlewares
 router.param('taskId', taskExist)
 router.param('taskId', taskBelongsToProject)
 
@@ -96,7 +116,7 @@ router.delete('/:projectId/tasks/:taskId',
     TaksController.deleteTask
 )
 
-// Update Stake
+// Update State
 router.post('/:projectId/tasks/:taskId/status',
     param('taskId').isMongoId().withMessage('Invalid ID'),
     body('status').notEmpty().withMessage('Status is required'),
