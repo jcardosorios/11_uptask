@@ -13,7 +13,7 @@ export class TaksController {
 
             await Promise.allSettled([task.save(), project.save()])
 
-            res.json({data: 'Task succesfully created'})
+            res.send('Task succesfully created')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -26,7 +26,7 @@ export class TaksController {
                 project: project.id,
                 isDeleted: false
             }).populate('project')
-            res.json({data: tasks})
+            res.send(tasks)
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -35,7 +35,7 @@ export class TaksController {
     static getTaskByID = async (req : Request, res: Response) => {
         const { task } = req
         try {
-            res.json({ data: task})
+            res.send(task)
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -48,7 +48,7 @@ export class TaksController {
             task.description = req.body.description
             await task.save()
             
-            res.json({ data: 'Task Successfully Updated'})
+            res.send('Task Successfully Updated')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -65,7 +65,7 @@ export class TaksController {
 
             await Promise.allSettled([task.save(), req.project.save()])
             
-            res.json({ data: 'Task Successfully Deleted'})
+            res.send('Task Successfully Deleted')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -78,7 +78,7 @@ export class TaksController {
             project.tasks = project.tasks.filter( mappedTask => mappedTask._id.toString() !== task._id.toString())
             await Promise.allSettled([task.deleteOne(), project.save()])
             
-            res.json({ data: 'Task Successfully Deleted'})
+            res.send('Task Successfully Deleted')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -92,7 +92,7 @@ export class TaksController {
             task.status = status
             await task.save()
             
-            res.json({ data: 'Status Successfully Updated'})
+            res.send('Status Successfully Updated')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }

@@ -8,7 +8,7 @@ export class ProjectController {
         try {
             await project.save()
             // await Project.create(req.body)
-            res.json({data: 'Project succesfully created'})
+            res.send('Project succesfully created')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -19,7 +19,7 @@ export class ProjectController {
             const projects = await Project.find({
                 isDeleted: false
             })
-            res.json({data: projects})
+            res.send(projects)
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -28,7 +28,7 @@ export class ProjectController {
     static getProjectByID = async (req : Request, res: Response) => {
         const { project } = req
         try {
-            res.json({ data: project})
+            res.send(project)
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -42,7 +42,7 @@ export class ProjectController {
             project.description = req.body.description
 
             await project.save()
-            res.json({data:'Project Updated'})
+            res.send('Project Updated')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -55,7 +55,7 @@ export class ProjectController {
             project.deletedAt = new Date()
 
             await project.save()
-            res.json({data:'Project Deleted'})
+            res.send('Project Deleted')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
@@ -65,7 +65,7 @@ export class ProjectController {
         const { project } = req
         try {
             await project.deleteOne()
-            res.json({data:'Project Deleted'})
+            res.send('Project Deleted')
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
         }
