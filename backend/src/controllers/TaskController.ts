@@ -55,7 +55,7 @@ export class TaksController {
     static updateTask = async (req : Request, res: Response) => {
         const { taskId } = req.params
         try {
-            const task = await Task.findByIdAndUpdate(taskId, req.body)
+            const task = await Task.findById(taskId)
             if (!task || task.isDeleted){
                 const error = new Error('Task not found')
                 res.status(404).json({errors: [error.message]})
@@ -66,6 +66,10 @@ export class TaksController {
                 res.status(400).json({errors: [error.message]})
                 return
             }
+            task.taskName = req.body.taskName
+            task.description = req.body.description
+            await task.save()
+            
             res.json({ data: 'Task Successfully Updated'})
         } catch (error) {
             res.status(500).json({ errors: 'There was an error'})
