@@ -80,19 +80,18 @@ router.get('/:projectId/tasks',
 )
 
 // Task Validation Middlewares
+router.param('taskId', param('taskId').isMongoId().withMessage('Invalid ID'))
+router.param('taskId', handleInputErrors)
 router.param('taskId', taskExist)
 router.param('taskId', taskBelongsToProject)
 
 // Get one task by ID
 router.get('/:projectId/tasks/:taskId',
-    param('taskId').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
     TaksController.getTaskByID
 )
 
 // Update task by ID
 router.put('/:projectId/tasks/:taskId',
-    param('taskId').isMongoId().withMessage('Invalid ID'),
     body('taskName')
         .notEmpty().withMessage('Task name is required'),
     body('description')
@@ -103,21 +102,16 @@ router.put('/:projectId/tasks/:taskId',
 
 // Soft Delete task by ID
 router.patch('/:projectId/tasks/:taskId',
-    param('taskId').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
     TaksController.softDeleteTask
 )
 
 // Delete task by ID
 router.delete('/:projectId/tasks/:taskId',
-    param('taskId').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
     TaksController.deleteTask
 )
 
 // Update State
 router.post('/:projectId/tasks/:taskId/status',
-    param('taskId').isMongoId().withMessage('Invalid ID'),
     body('status').notEmpty().withMessage('Status is required'),
     handleInputErrors,
     TaksController.updateStatus
