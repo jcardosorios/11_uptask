@@ -19,7 +19,7 @@ export class ProjectController {
         try {
             const projects = await Project.find({
                 isDeleted: false
-            })
+            }).populate('tasks')
             res.send(projects)
         } catch (error) {
             handleError(res, error, "Failed to fetch projects")

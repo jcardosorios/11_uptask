@@ -13,7 +13,7 @@ export async function projectExist(req: Request, res: Response, next: NextFuncti
     try {
         const { projectId } = req.params
         // Search existing project
-        const project = await Project.findById(projectId)
+        const project = await Project.findById(projectId).populate('tasks')
         if (!project || project.isDeleted){
             res.status(404).json({errors: [{
                 type: "field",
