@@ -1,12 +1,64 @@
 import { Fragment } from 'react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Task, TaskFormData, taskSchema } from '@/types/index';
+import { useForm } from 'react-hook-form';
+import TaskForm from './TaskForm';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateTask } from '@/api/TaskAPI';
+import { toast } from 'react-toastify';
 
-export default function EditTaskModal() {
+type EditTaskDataProps = {
+    dataTask: Task
+}
+
+export default function EditTaskModal({ dataTask } : EditTaskDataProps) {
     const navigate = useNavigate()
+    
+    // Get project ID
+    const params = useParams()
+    const projectId = params.projectId!
+    
+    // Close Modal
+    const closeModal = () => navigate(location.pathname, {replace: true})
+    
+    // Hook for form
+    const { register, handleSubmit, reset, formState: {errors} } = useForm<TaskFormData>({defaultValues: {
+        taskName: dataTask.taskName,
+        description: dataTask.description
+    }})
+    
+    // Mutation to Edit
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation({
+        mutationFn: updateTask,
+        onError: (errors: string[]) => {
+            errors.forEach( (message) => toast.error(message))
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['editProject', projectId]})
+            queryClient.invalidateQueries({queryKey: ['task', dataTask._id]})
+            toast.success(data)
+            reset(),
+            closeModal()
+        }
+        
+    })
+
+    // Handle Submit
+    const handleEditTask = (formData: TaskFormData) => {
+        const data = {
+            formData,
+            projectId: projectId,
+            taskId: dataTask._id
+        }
+
+        mutate(data)
+    }
+    
     return (
         <Transition appear show={true} as={Fragment}>
-            <Dialog as="div" className="relative z-10" onClose={() => navigate(location.pathname, {replace: true}) }>
+            <Dialog as="div" className="relative z-10" onClose={closeModal }>
                 {/* navigate(location.pathname, {replace: true}) Remove URL params */}
                 <TransitionChild
                     as={Fragment}
@@ -45,8 +97,13 @@ export default function EditTaskModal() {
 
                                 <form
                                     className="mt-10 space-y-3"
+                                    onSubmit={handleSubmit(handleEditTask)}
                                     noValidate
                                 >
+                                    <TaskForm 
+                                        register={register}
+                                        errors={errors}
+                                    />
                                     <input
                                         type="submit"
                                         className=" bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"

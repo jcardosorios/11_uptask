@@ -1,7 +1,7 @@
 
 import { getTaskById } from '@/api/TaskAPI'
 import { useQuery } from '@tanstack/react-query'
-import { useLocation, useParams } from 'react-router-dom'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
 import EditTaskModal from './EditTaskModal'
 
 export default function EditTaskData() {
@@ -16,11 +16,12 @@ export default function EditTaskData() {
     const taskId = queryParams.get('editTask')!
     
     // Get Task by Id
-    const { data } = useQuery({
+    const { data, isError } = useQuery({
         queryKey: ['task', taskId],
         queryFn: () => getTaskById({projectId, taskId}),
-        enabled: !!taskId // Fetch only when taskId is defined
+        enabled: !!taskId, // Fetch only when taskId is defined
+        retry: false
     })
-
-    if (data) return <EditTaskModal data={data}/>
+    if(isError) return <Navigate to='/404'/>
+    if (data) return <EditTaskModal dataTask={data}/>
 }
