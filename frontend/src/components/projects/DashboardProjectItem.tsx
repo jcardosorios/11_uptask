@@ -13,6 +13,8 @@ type DashboardProjectItemProps = {
 
 export default function DashboardProjectItem({project} : DashboardProjectItemProps) {
     const queryClient = useQueryClient()
+
+    // Delete Project
     const { mutate } = useMutation({
         mutationFn: deleteProject,
         onError: (errors: string[]) => {
