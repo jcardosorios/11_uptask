@@ -3,13 +3,29 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
 import { Project } from '@/types/index'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteProject } from '@/api/ProjectAPI'
+import { toast } from 'react-toastify'
 
 type DashboardProjectItemProps = {
     project: Project
 }
 
 export default function DashboardProjectItem({project} : DashboardProjectItemProps) {
-  return (
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation({
+        mutationFn: deleteProject,
+        onError: (errors: string[]) => {
+            errors.forEach( (message) => toast.error(message))
+        },
+        onSuccess : (data) => {
+            queryClient.invalidateQueries({queryKey: ['projects']})
+            toast.success(data)
+        }
+    
+    })
+    
+    return (
     <>
     {/* Main project info */}
     <div className="flex min-w-0 gap-x-4">
@@ -26,9 +42,9 @@ export default function DashboardProjectItem({project} : DashboardProjectItemPro
         </div>
     </div>
     {/* Project actions */}
-    <div className="flex shrink-0 items-center gap-x-6">
+    <div className="flex shrink-0 items-center gap-x-6 cursor-pointer">
         <Menu as="div" className="relative flex-none">
-            <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+            <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900 cursor-pointer">
                 <span className="sr-only">opciones</span>
                 <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
             </MenuButton>
@@ -42,14 +58,14 @@ export default function DashboardProjectItem({project} : DashboardProjectItemPro
                     {/* Go to project */}
                     <MenuItem>
                         <Link to={``}
-                            className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                            className='block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-100'>
                             Go to project
                         </Link>
                     </MenuItem>
                     {/* Edit Project */}
                     <MenuItem>
                         <Link to={`/projects/${project._id}/edit`}
-                            className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                            className='block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-100'>
                             Edit
                         </Link>
                     </MenuItem>
@@ -57,8 +73,8 @@ export default function DashboardProjectItem({project} : DashboardProjectItemPro
                     <MenuItem>
                         <button 
                             type='button' 
-                            className='block px-3 py-1 text-sm leading-6 text-red-500'
-                            onClick={() => {} }
+                            className='block px-3 py-1 text-sm leading-6 w-full text-left text-red-500 cursor-pointer hover:bg-gray-100'
+                            onClick={() => mutate(project._id) }
                         > Delete</button>
                     </MenuItem>
                 </MenuItems>
