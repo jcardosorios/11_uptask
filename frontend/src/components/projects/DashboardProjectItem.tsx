@@ -30,7 +30,7 @@ export default function DashboardProjectItem({project} : DashboardProjectItemPro
     {/* Main project info */}
     <div className="flex min-w-0 gap-x-4">
         <div className="min-w-0 flex-auto space-y-2">
-            <Link to={``}
+            <Link to={`/projects/${project._id}`}
                 className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold"
             >{project.projectName}</Link>
             <p className="text-sm text-gray-400">
@@ -57,7 +57,7 @@ export default function DashboardProjectItem({project} : DashboardProjectItemPro
                 >   
                     {/* Go to project */}
                     <MenuItem>
-                        <Link to={``}
+                        <Link to={`/projects/${project._id}`}
                             className='block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-100'>
                             Go to project
                         </Link>

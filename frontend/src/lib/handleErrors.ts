@@ -7,7 +7,7 @@ export function handleErrorsAxios(error: unknown) {
         if (Array.isArray(errors)) {
             throw errors.map(err => err.msg)
         } else {
-            throw new Error("An unexpected error occurred.")
+            throw new Error(errors)
         }
     }
     throw new Error("Failed to communicate with the server.")
