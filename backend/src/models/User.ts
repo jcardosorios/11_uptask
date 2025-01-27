@@ -4,7 +4,7 @@ export interface IUser extends Document {
     email: string
     password: string
     name: string
-    confirmied : boolean
+    confirmed : boolean
     isDeleted: boolean
     deletedAt: Date | null
 }

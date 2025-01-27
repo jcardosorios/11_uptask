@@ -24,4 +24,12 @@ router.post('/create-account',
     AuthController.createAccount
 )
 
+// Confirm Account
+router.post('/confirm-account',
+    body('token')
+        .notEmpty().withMessage('Token is required'),
+    handleInputErrors,
+    AuthController.confirmAccount
+)
+
 export default router

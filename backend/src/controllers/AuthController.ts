@@ -43,8 +43,32 @@ export class AuthController {
             res.send('Account succesfully created, confirm your email to login')
 
         } catch (error) {
-            handleError(res, error, "Failed to create the task")
+            handleError(res, error, "Failed to create the account")
         }
         
+    }
+
+    static confirmAccount = async (req : Request ,res: Response)  => {
+        try {
+            const { token } = req.body
+            // Validate token exist
+            const tokenExist = await Token.findOne({ token })
+
+            if(!tokenExist){
+                const error = new Error('Invalid token')
+                res.status(401).json([error.message])
+                return 
+            }
+
+            // If token is valid
+            const user = await User.findById(tokenExist.user)
+            user.confirmed = true
+
+            await Promise.allSettled([user.save(), tokenExist.deleteOne()])
+
+            res.send('Account confirmed, you can login now')
+        } catch(error) {
+            handleError(res, error, "Failed to confirm the account")
+        }
     }
 }
