@@ -2,7 +2,10 @@ import { Fragment } from 'react'
 import { Task } from "@/types/index"
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteTask } from '@/api/TaskAPI'
+import { toast } from 'react-toastify'
 
 type TypeCardProps = {
     task : Task
@@ -10,6 +13,24 @@ type TypeCardProps = {
 
 export default function TaskCard({task} : TypeCardProps) {
     const navigate = useNavigate()
+
+    // Get Project ID
+    const params = useParams()
+    const projectId = params.projectId!
+
+    // Delete task mutation
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation({
+        mutationFn: deleteTask,
+        onError: (errors: string[]) => {
+            errors.forEach( (message) => toast.error(message))
+        },
+        onSuccess : (data) => {
+            queryClient.invalidateQueries({queryKey: ['project', projectId]})
+            toast.success(data)
+        }
+    
+    })
     return (
     <li className="p-5 bg-white border-slate-300 flex justify-between gap-3">
         <div className="min-w-0 flex flex-col gap-y-4">
@@ -47,7 +68,10 @@ export default function TaskCard({task} : TypeCardProps) {
                         </MenuItem>
 
                         <MenuItem>
-                            <button type='button' className='block px-3 py-1 text-sm leading-6 text-red-500 w-full text-left hover:bg-gray-100 cursor-pointer'>
+                            <button 
+                                type='button' 
+                                onClick={() => mutate({projectId, taskId :task._id})}
+                                className='block px-3 py-1 text-sm leading-6 text-red-500 w-full text-left hover:bg-gray-100 cursor-pointer'>
                                 Delete
                             </button>
                         </MenuItem>
