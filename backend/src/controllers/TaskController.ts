@@ -1,6 +1,6 @@
 import type { Request, Response} from 'express'
 import Task from '../models/Task'
-import { handleError } from '../utils'
+import { handleError } from '../utils/errors'
 
 export class TaksController {
     static createTask = async (req : Request, res: Response) => {

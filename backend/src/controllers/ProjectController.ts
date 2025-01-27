@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import Project from '../models/Project'
 import { restart } from 'pm2'
-import { handleError } from '../utils'
+import { handleError } from '../utils/errors'
 
 export class ProjectController {  
     static createProject = async (req : Request, res: Response) => {
