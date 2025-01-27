@@ -36,7 +36,7 @@ export default function EditTaskModal({ dataTask } : EditTaskDataProps) {
             errors.forEach( (message) => toast.error(message))
         },
         onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['editProject', projectId]})
+            queryClient.invalidateQueries({queryKey: ['project', projectId]})
             queryClient.invalidateQueries({queryKey: ['task', dataTask._id]})
             toast.success(data)
             reset(),
