@@ -54,8 +54,11 @@ export default function TaskCard({task} : TypeCardProps) {
                     <MenuItems
                         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none ">
                         <MenuItem>
-                            <button type='button' className='block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left hover:bg-gray-100 cursor-pointer'>
-                                Go to Task
+                            <button 
+                            type='button' 
+                            onClick={() => navigate(location.pathname + `?viewTask=${task._id}&`) }
+                            className='block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left hover:bg-gray-100 cursor-pointer'>
+                                View Task
                             </button>
                         </MenuItem>
                         <MenuItem>

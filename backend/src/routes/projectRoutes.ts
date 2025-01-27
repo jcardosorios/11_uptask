@@ -26,7 +26,7 @@ router.get('/',
 )
 // Project Validation Middlewares
 router.param('projectId',
-    param('projectId').isMongoId().withMessage('Invalid ID')
+    param('projectId').isMongoId().withMessage('Invalid Project ID')
 )
 router.param('projectId',
     handleInputErrors
@@ -62,7 +62,6 @@ router.patch('/:projectId',
 
 
 /* Routes for tasks */
-router.param('projectId', projectExist)
 
 // Create Task
 router.post('/:projectId/tasks', 
@@ -80,7 +79,7 @@ router.get('/:projectId/tasks',
 )
 
 // Task Validation Middlewares
-router.param('taskId', param('taskId').isMongoId().withMessage('Invalid ID'))
+router.param('taskId', param('taskId').isMongoId().withMessage('Invalid Task ID'))
 router.param('taskId', handleInputErrors)
 router.param('taskId', taskExist)
 router.param('taskId', taskBelongsToProject)
