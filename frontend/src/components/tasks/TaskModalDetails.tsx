@@ -4,6 +4,9 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query';
 import { getTaskById } from '@/api/TaskAPI';
 import { toast } from 'react-toastify';
+import { formatDate } from '@/utils/utils';
+import { statusTranslations } from "@/locales/en"
+
 
 
 export default function TaskModalDetails() {
@@ -43,8 +46,7 @@ export default function TaskModalDetails() {
         return <Navigate to={`/projects/${projectId}`}/>
     }
 
-  
-    return (
+    if(data) return (
         <>
             <Transition appear show={show} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -72,16 +74,29 @@ export default function TaskModalDetails() {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <DialogPanel className="w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white text-left align-middle shadow-xl transition-all p-16">
-                                    <p className='text-sm text-slate-400'>Agregada el: </p>
-                                    <p className='text-sm text-slate-400'>Última actualización: </p>
+                                    <p className='text-sm text-slate-400'>Created at: { formatDate(data.createdAt)}</p>
+                                    <p className='text-sm text-slate-400'>Last update: {formatDate(data.updatedAt)} </p>
                                     <DialogTitle
                                         as="h3"
                                         className="font-black text-4xl text-slate-600 my-5"
-                                    >Titulo aquí
-                                    </DialogTitle>
-                                    <p className='text-lg text-slate-500 mb-2'>Descripción:</p>
+                                    >Titulo aquí</DialogTitle>
+                                    <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
                                     <div className='my-5 space-y-3'>
-                                        <label className='font-bold'>Estado Actual:</label>
+                                        <label className='font-bold'>State: {}</label>
+                                        <select
+                                            className='w-full p-3 bg-white border border-gray-300'
+                                            defaultValue={data.status}
+                                        >
+                                            {Object.entries(statusTranslations).map(([key, value]) => (
+                                                <option
+                                                    key={key}
+                                                    value={key}
+                                                >
+                                                    {value}
+                                                </option>
+                                            ))}
+                                            {/* <option>{statusTranslations[data.status]}</option> */}
+                                        </select>
                                     </div>
                                 </DialogPanel>
                             </TransitionChild>
