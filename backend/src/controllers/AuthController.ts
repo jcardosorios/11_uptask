@@ -14,10 +14,11 @@ export class AuthController {
             const { password, email } = req.body
 
             // Prevent duplicated
+            // TODO : create and move to middleware
             const userExist = await User.findOne({email})
             if(userExist){
                 const error = new Error('User already exist')
-                res.status(409).json([error.message])
+                res.status(409).json({ errors: [{msg : error.message}]})
                 return
             }
             
