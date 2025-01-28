@@ -15,9 +15,11 @@ export class AuthEmail {
         const templatePath = path.join(__dirname, '../templates/emailConfirmation.html');
         const emailTemplate = fs.readFileSync(templatePath, 'utf8');
 
+        const url = `${process.env.FRONTEND_URL}/auth/confirm-account`
         const customizedHtml = emailTemplate
             .replace('{{name}}', user.name)
-            .replace('{{token}}', user.token);
+            .replace('{{token}}', user.token)
+            .replace('{{link}}', url)
 
         const info = await transporter.sendMail({
             from: 'UpTask <admin@uptask.com>',
