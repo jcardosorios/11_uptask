@@ -6,6 +6,7 @@ import EditProjectView from './views/projects/EditProjectView'
 import ProjectDetailsView from './views/projects/ProjectDetailsView'
 import AuthLayout from './layouts/AuthLayout'
 import LoginVIew from './views/auth/LoginVIew'
+import RegisterView from './views/auth/RegisterView'
 
 export default function Router(){
     return(
@@ -19,6 +20,7 @@ export default function Router(){
                 </Route>
                 <Route element={<AuthLayout />}>
                     <Route path='/auth/login' element={<LoginVIew />}/>
+                    <Route path='/auth/register' element={<RegisterView />}/>
                 </Route>
             </Routes>
         </BrowserRouter>
