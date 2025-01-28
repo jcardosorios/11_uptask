@@ -18,6 +18,7 @@ export class AuthController {
             if(userExist){
                 const error = new Error('User already exist')
                 res.status(409).json([error.message])
+                return
             }
             
             // Create a user
@@ -50,25 +51,31 @@ export class AuthController {
 
     static confirmAccount = async (req : Request ,res: Response)  => {
         try {
-            const { token } = req.body
-            // Validate token exist
-            const tokenExist = await Token.findOne({ token })
 
-            if(!tokenExist){
-                const error = new Error('Invalid token')
-                res.status(401).json([error.message])
-                return 
-            }
+            const { token } = req
 
-            // If token is valid
-            const user = await User.findById(tokenExist.user)
+            // Confirm user
+            const user = await User.findById(token.user)
             user.confirmed = true
 
-            await Promise.allSettled([user.save(), tokenExist.deleteOne()])
+            await Promise.allSettled([user.save(), token.deleteOne()])
 
             res.send('Account confirmed, you can login now')
         } catch(error) {
             handleError(res, error, "Failed to confirm the account")
         }
     }
+
+    static loginAccount = async (req : Request ,res: Response)  => {
+        try{
+            const { password, email } = req.user
+
+
+            res.send('Autenticando')
+        } catch (error) {
+            handleError(res, error, "Failed to create the account")
+        }
+    }
+    
+
 }

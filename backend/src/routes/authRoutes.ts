@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
+import { tokenExist, userConfirmed, userExist, validatePassword } from '../middleware/auth'
 
 const router = Router()
 
@@ -29,7 +30,21 @@ router.post('/confirm-account',
     body('token')
         .notEmpty().withMessage('Token is required'),
     handleInputErrors,
+    tokenExist,
     AuthController.confirmAccount
+)
+
+// Login Account
+router.post('/login',
+    body('email')
+        .isEmail().withMessage('Email must be valid'),
+    body('password')
+        .notEmpty().withMessage('Password is required'),
+    handleInputErrors,
+    userExist,
+    userConfirmed,
+    validatePassword,
+    AuthController.loginAccount
 )
 
 export default router
