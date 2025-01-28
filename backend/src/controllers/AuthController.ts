@@ -68,8 +68,6 @@ export class AuthController {
 
     static loginAccount = async (req : Request ,res: Response)  => {
         try{
-            const { password, email } = req.user
-
 
             res.send('Autenticando')
         } catch (error) {
