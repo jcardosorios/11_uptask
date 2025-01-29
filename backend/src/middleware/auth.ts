@@ -4,16 +4,18 @@ import Token, { IToken } from '../models/Token'
 import { generateToken } from '../utils/token'
 import { AuthEmail } from '../emails/AuthEmail'
 import { checkPassword } from '../utils/auth'
+import jwt from 'jsonwebtoken'
 
 declare global {
     namespace Express {
         interface Request {
-            user: IUser,
-            token: IToken
+            user?: IUser,
+            token?: IToken
         }
     }
 }
 
+// Validate that token existe
 export async function tokenExist(req: Request, res: Response, next: NextFunction){
     try {
 
@@ -37,6 +39,7 @@ export async function tokenExist(req: Request, res: Response, next: NextFunction
     }
 }
 
+// Validate that user exist
 export async function userExist(req: Request, res: Response, next: NextFunction){
     try {
 
@@ -60,6 +63,7 @@ export async function userExist(req: Request, res: Response, next: NextFunction)
     }
 }
 
+// Validate if user is not confirmed
 export async function checkUserNotConfirmed(req: Request, res: Response, next: NextFunction){
     try {
 
@@ -91,6 +95,7 @@ export async function checkUserNotConfirmed(req: Request, res: Response, next: N
     }
 }
 
+// Validate if user is confirmed
 export async function checkUserConfirmed(req: Request, res: Response, next: NextFunction){
     try {
 
@@ -110,15 +115,13 @@ export async function checkUserConfirmed(req: Request, res: Response, next: Next
     }
 }
 
-
+// Validate password
 export async function validatePassword(req: Request, res: Response, next: NextFunction){
     try {
         const { password } = req.body
         const { user } = req
         const isPasswordCorrect = await checkPassword(password, user.password)
         
-        console.log(user)
-        console.log(isPasswordCorrect)
         // Validate if password is correct
         if (!isPasswordCorrect){
             res.status(401).json({errors: [{
@@ -131,4 +134,46 @@ export async function validatePassword(req: Request, res: Response, next: NextFu
     } catch (error) {
         next(error)
     }
+}
+
+
+// Validate JWT on headers
+export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+    const bearer = req.headers.authorization
+    
+    // Validate there is a bearer
+    if(!bearer){
+        res.status(401).json({errors: [{
+            msg: 'Not authorized',
+        }]})
+        return
+    }
+    const [, token] = bearer.split(' ')
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if(typeof decoded === 'object' && decoded.id){
+            const user = await User.findById(decoded.id).select('_id name email')
+            if(user) {
+                req.user = user
+                next()
+            } else {
+                res.status(401).json({
+                    errors: [{
+                        msg: 'Invalid or expired token',
+                    }]
+                });
+            }
+        }
+    } catch (error) {
+        res.status(401).json({
+            errors: [{
+                msg: 'Invalid or expired token',
+            }]
+        });
+    }
+
+
+    next()
+
+
 }
