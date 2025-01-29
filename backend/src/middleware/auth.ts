@@ -19,14 +19,14 @@ export async function tokenExist(req: Request, res: Response, next: NextFunction
 
 
         // Search existing token
-        const token = await Token.findOne({ token : req.body.token })
+        const token = await Token.findOne({ token : req.body.token || req.params.token })
         if (!token){
             res.status(404).json({errors: [{
                 type: "field",
-                value: token,
+                value: req.body.token || req.params.token,
                 msg: 'Token invalid',
                 path: "token",
-                location: "body"
+                location: req.body.token ? "body" : "params"
             }]})
             return
         }

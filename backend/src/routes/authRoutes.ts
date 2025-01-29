@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
+import { body, param } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
 import { tokenExist, checkUserNotConfirmed, userExist, validatePassword, checkUserConfirmed } from '../middleware/auth'
@@ -64,6 +64,32 @@ router.post('/forgot-password',
     handleInputErrors,
     userExist,
     AuthController.forgotPassword
+)
+
+// Confirm token New password
+router.post('/validate-token',
+    body('token')
+        .notEmpty().withMessage('Token is required'),
+    handleInputErrors,
+    tokenExist,
+    AuthController.validateToken
+)
+
+// Resrt password
+router.post('/reset-password/:token',
+    param('token')
+        .notEmpty().withMessage('Token is required'),
+    body('password')
+        .isLength({ min: 8}).withMessage('Password must be at least 8 characters long'),
+    body('password_confirmation').custom((value, { req }) => {
+        if(value !== req.body.password){
+            throw new Error('Passwords do not match')
+        }
+        return true
+    }),
+    handleInputErrors,
+    tokenExist,
+    AuthController.resetPasswordWithToken
 )
 
 export default router

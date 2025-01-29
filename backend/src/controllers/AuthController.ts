@@ -126,6 +126,30 @@ export class AuthController {
         }
         
     }
+
+    static validateToken = async (req : Request ,res: Response)  => {
+        try {
+            res.send('Valid Token, enter your new password')
+        } catch(error) {
+            handleError(res, error, "Failed to confirm the account")
+        }
+    }
+
+    static resetPasswordWithToken = async (req : Request ,res: Response)  => {
+        try {
+            const { token } = req
+            const { password } = req.body
+
+            const user = await User.findById(token.user)
+            user.password = await hashPassword(password)
+
+            await Promise.allSettled([user.save(), token.deleteOne()])
+
+            res.send('Password change succesfully, you can login now')
+        } catch(error) {
+            handleError(res, error, "Failed to confirm the account")
+        }
+    }
     
 
 }
