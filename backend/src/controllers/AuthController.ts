@@ -6,6 +6,7 @@ import { hashPassword } from '../utils/auth'
 import Token from '../models/Token'
 import { generateToken } from '../utils/token'
 import { AuthEmail } from '../emails/AuthEmail'
+import { generateJWT } from '../utils/jwt'
 
 export class AuthController {
     static createAccount = async (req : Request ,res: Response)  => {
@@ -67,9 +68,10 @@ export class AuthController {
     }
 
     static loginAccount = async (req : Request ,res: Response)  => {
+        const { user } = req
         try{
-
-            res.send('Autenticando')
+            const token = generateJWT({id: user.id})
+            res.send(token)
         } catch (error) {
             handleError(res, error, "Failed to create the account")
         }
