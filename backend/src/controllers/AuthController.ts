@@ -5,7 +5,6 @@ import User from '../models/User'
 import { hashPassword } from '../utils/auth'
 import Token from '../models/Token'
 import { generateToken } from '../utils/token'
-import { transporter } from '../config/nodemailer'
 import { AuthEmail } from '../emails/AuthEmail'
 
 export class AuthController {
@@ -95,6 +94,32 @@ export class AuthController {
             //Save new user
             await Promise.allSettled([user.save(), token.save()])
             res.send('A new code was sent to your email')
+
+        } catch (error) {
+            handleError(res, error, "Failed to create the account")
+        }
+        
+    }
+
+    static forgotPassword = async (req : Request ,res: Response)  => {
+        try {
+            const { user } = req
+
+            // Generate token
+            const token = new Token()
+            token.token = generateToken()
+            token.user = user.id
+            //Save token
+            await token.save()
+
+            // Send email
+            await AuthEmail.sendPasswordResetToken({
+                email: user.email,
+                name: user.name,
+                token: token.token
+            })
+            
+            res.send('A code was sent to your email to reset your password')
 
         } catch (error) {
             handleError(res, error, "Failed to create the account")

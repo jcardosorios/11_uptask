@@ -9,10 +9,26 @@ interface IEmail {
 }
 
 export class AuthEmail {
+    static async sendEmail(htmlEmail : string, email: string, subject: string){
+        try {
+            const info = await transporter.sendMail({
+                from: 'UpTask <admin@uptask.com>',
+                to: email,
+                subject: subject,
+                text: subject,
+                html: htmlEmail
+            })
+    
+            console.log('Email sent', info.messageId)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     static sendConfirmationEmail = async (user : IEmail) => {
 
         // Read the HTML template file
-        const templatePath = path.join(__dirname, '../templates/emailConfirmation.html');
+        const templatePath = path.join(__dirname, './templates/emailConfirmation.html');
         const emailTemplate = fs.readFileSync(templatePath, 'utf8');
 
         const url = `${process.env.FRONTEND_URL}/auth/confirm-account`
@@ -21,14 +37,22 @@ export class AuthEmail {
             .replace('{{token}}', user.token)
             .replace('{{link}}', url)
 
-        const info = await transporter.sendMail({
-            from: 'UpTask <admin@uptask.com>',
-            to: user.email,
-            subject: 'Uptask - Confirm your account',
-            text: 'Uptask - Confirm your account',
-            html: customizedHtml
-        })
+        await AuthEmail.sendEmail(customizedHtml, user.email, 'Uptask - Confirm your account')
 
-        console.log('Email sent', info.messageId)
+    }
+
+    static sendPasswordResetToken = async (user : IEmail) => {
+
+        // Read the HTML template file
+        const templatePath = path.join(__dirname, './templates/emailResetPassword.html');
+        const emailTemplate = fs.readFileSync(templatePath, 'utf8');
+
+        const url = `${process.env.FRONTEND_URL}/auth/reset-password`
+        const customizedHtml = emailTemplate
+            .replace('{{name}}', user.name)
+            .replace('{{token}}', user.token)
+            .replace('{{link}}', url)
+
+        await AuthEmail.sendEmail(customizedHtml, user.email, 'Uptask - Reset your password')
     }
 }

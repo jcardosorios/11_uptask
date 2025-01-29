@@ -30,9 +30,14 @@ const { mutate } = useMutation({
 
     return (
     <>
+        <h1 className="text-5xl font-black text-white">Log in</h1>
+        <p className="text-2xl font-light text-white mt-5">
+        Start managing your projects by logging in {''}
+            <span className=" text-fuchsia-500 font-bold"> this form</span>
+        </p>
     <form
         onSubmit={handleSubmit(handleLogin)}
-        className="space-y-8 p-10 bg-white"
+        className="space-y-8 p-10 mt-10 bg-white"
         noValidate
     >
         <div className="flex flex-col gap-5">
@@ -84,12 +89,16 @@ const { mutate } = useMutation({
             className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
         />
       </form>
-      <nav className="mt-5 flex flex-col space-y-4">
+        <nav className="mt-5 flex flex-col space-y-4">
             <Link 
                 to={'/auth/register'}
                 className="text-center text-gray-300 font-normal"
             >Don't have an account? Sign up.</Link>
-      </nav>
+            <Link
+                to='/auth/forgot-password'
+                className="text-center text-gray-300 font-normal"
+            > Forgot your password? Reset your pass. </Link>
+        </nav>
     </>
   )
 }

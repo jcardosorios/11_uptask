@@ -5,9 +5,10 @@ import { UserRegistrationForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
 import { createAccount } from "@/api/AuthAPI";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 export default function RegisterView() {
-  
+  const [isLoading, setIsLoading] = useState(false)
   const initialValues: UserRegistrationForm = {
     name: '',
     email: '',
@@ -25,6 +26,12 @@ export default function RegisterView() {
     onSuccess: (data) => {
         toast.success(data)
         reset()
+    },
+    onMutate: () => {
+        setIsLoading(true)
+    },
+    onSettled: () => {
+        setIsLoading(false)
     }
   })
   const password = watch('password');
@@ -32,6 +39,8 @@ export default function RegisterView() {
   const handleRegister = (formData: UserRegistrationForm) => {
     mutate(formData)
   }
+
+  // TODO : Crear Spinner para insertarlo
 
   return (
     <>
