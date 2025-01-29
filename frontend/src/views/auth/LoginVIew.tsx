@@ -16,8 +16,8 @@ export default function LoginView() {
 
 const { mutate } = useMutation({
     mutationFn: loginAccount,
-    onSuccess: (data) => {
-        toast.success(data)
+    onSuccess: () => {
+        toast.success('Login successful')
     },
     onError: (errors: string[]) => {
         errors.forEach( (message) => toast.error(message))

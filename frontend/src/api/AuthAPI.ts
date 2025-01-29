@@ -36,6 +36,7 @@ export async function loginAccount(formData: UserLoginForm) {
     try {
         const url = `/auth/login`
         const { data } = await api.post<string>(url, formData)
+        localStorage.setItem('AUTH_TOKEN', data)
         return data
     } catch (error) {
         handleErrorsAxios(error)
