@@ -29,10 +29,10 @@ export default function RequestNewCodeView() {
 
     return (
         <>
-            <h1 className="text-5xl font-black text-white">Solicitar Código de Confirmación</h1>
+            <h1 className="text-5xl font-black text-white">Request Confirmation Code</h1>
             <p className="text-2xl font-light text-white mt-5">
-                Coloca tu e-mail para recibir {''}
-                <span className=" text-fuchsia-500 font-bold"> un nuevo código</span>
+                Enter your email to receive {''}
+                <span className=" text-fuchsia-500 font-bold"> a new code</span>
             </p>
 
             <form
@@ -45,27 +45,30 @@ export default function RequestNewCodeView() {
                         className="font-normal text-2xl"
                         htmlFor="email"
                     >Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        placeholder="Email de Registro"
-                        className="w-full p-3 rounded-lg border-gray-300 border"
-                        {...register("email", {
-                            required: "El Email de registro es obligatorio",
-                            pattern: {
-                                value: /\S+@\S+\.\S+/,
-                                message: "E-mail no válido",
-                            },
-                        })}
-                    />
-                    {errors.email && (
-                        <ErrorMessage>{errors.email.message}</ErrorMessage>
-                    )}
+                    <div>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="E.g., user@email.com"
+                            className="w-full p-3 rounded-lg border-gray-300 border"
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /\S+@\S+\.\S+/,
+                                    message: "Invalid email",
+                                },
+                            })}
+                        />
+                        {errors.email && (
+                            <ErrorMessage>{errors.email.message}</ErrorMessage>
+                        )}
+
+                    </div>
                 </div>
 
                 <input
                     type="submit"
-                    value='Enviar Código'
+                    value='Send code'
                     className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 rounded-lg text-white font-black  text-xl cursor-pointer"
                 />
             </form>
@@ -75,13 +78,13 @@ export default function RequestNewCodeView() {
                     to='/auth/login'
                     className="text-center text-gray-300 font-normal"
                 >
-                    ¿Ya tienes cuenta? Iniciar Sesión
+                    Already have an account? Log in.
                 </Link>
                 <Link
                     to='/auth/forgot-password'
                     className="text-center text-gray-300 font-normal"
                 >
-                    ¿Olvidaste tu contraseña? Reestablecer
+                    Forgot your password? Reset your pass.
                 </Link>
             </nav>
         </>
