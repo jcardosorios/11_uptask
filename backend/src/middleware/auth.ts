@@ -60,7 +60,7 @@ export async function userExist(req: Request, res: Response, next: NextFunction)
     }
 }
 
-export async function userConfirmed(req: Request, res: Response, next: NextFunction){
+export async function checkUserNotConfirmed(req: Request, res: Response, next: NextFunction){
     try {
 
         const { user } = req
@@ -81,6 +81,25 @@ export async function userConfirmed(req: Request, res: Response, next: NextFunct
 
             res.status(401).json({errors: [{
                 msg: 'User not confirmed, we resend you a confirmation email',
+            }]})
+            return
+        }
+
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function checkUserConfirmed(req: Request, res: Response, next: NextFunction){
+    try {
+
+        const { user } = req
+        // Validate if user is confirmed
+        if (user.confirmed){
+
+            res.status(403).json({errors: [{
+                msg: 'User already confirmed',
             }]})
             return
         }

@@ -75,6 +75,32 @@ export class AuthController {
             handleError(res, error, "Failed to create the account")
         }
     }
+
+    static requestConfirmationCode = async (req : Request ,res: Response)  => {
+        try {
+            const { user } = req
+
+            // Generate token
+            const token = new Token()
+            token.token = generateToken()
+            token.user = user.id
+
+            // Send email
+            await AuthEmail.sendConfirmationEmail({
+                email: user.email,
+                name: user.name,
+                token: token.token
+            })
+            
+            //Save new user
+            await Promise.allSettled([user.save(), token.save()])
+            res.send('A new code was sent to your email')
+
+        } catch (error) {
+            handleError(res, error, "Failed to create the account")
+        }
+        
+    }
     
 
 }
