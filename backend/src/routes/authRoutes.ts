@@ -1,34 +1,21 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
-import { handleInputErrors } from '../middleware/validation'
+import { handleInputErrors, validateCreateAccount, validateEmailInput, validateLoginInput, validateResetPasswordInput, validateTokenInput } from '../middleware/validation'
 import { tokenExist, checkUserNotConfirmed, userExist, validatePassword, checkUserConfirmed } from '../middleware/auth'
 
 const router = Router()
 
 // Create Account
 router.post('/create-account',
-    // Validation
-    body('name')
-        .notEmpty().withMessage('Name is required'),
-    body('password')
-        .isLength({ min: 8}).withMessage('Password must be at least 8 characters long'),
-    body('password_confirmation').custom((value, { req }) => {
-        if(value !== req.body.password){
-            throw new Error('Passwords do not match')
-        }
-        return true
-    }),
-    body('email')
-        .isEmail().withMessage('Email must be valid'),
+    validateCreateAccount,
     handleInputErrors,
     AuthController.createAccount
 )
 
 // Confirm Account
 router.post('/confirm-account',
-    body('token')
-        .notEmpty().withMessage('Token is required'),
+    validateTokenInput,
     handleInputErrors,
     tokenExist,
     AuthController.confirmAccount
@@ -36,10 +23,7 @@ router.post('/confirm-account',
 
 // Login Account
 router.post('/login',
-    body('email')
-        .isEmail().withMessage('Email must be valid'),
-    body('password')
-        .notEmpty().withMessage('Password is required'),
+    validateLoginInput,
     handleInputErrors,
     userExist,
     checkUserNotConfirmed,
@@ -49,8 +33,7 @@ router.post('/login',
 
 // Resend confirmation code
 router.post('/request-code',
-    body('email')
-        .isEmail().withMessage('Email must be valid'),
+    validateEmailInput,
     handleInputErrors,
     userExist,
     checkUserConfirmed,
@@ -59,8 +42,7 @@ router.post('/request-code',
 
 // Forgot password
 router.post('/forgot-password',
-    body('email')
-        .isEmail().withMessage('Email must be valid'),
+    validateEmailInput,
     handleInputErrors,
     userExist,
     AuthController.forgotPassword
@@ -68,8 +50,7 @@ router.post('/forgot-password',
 
 // Confirm token New password
 router.post('/validate-token',
-    body('token')
-        .notEmpty().withMessage('Token is required'),
+    validateTokenInput,
     handleInputErrors,
     tokenExist,
     AuthController.validateToken
@@ -77,16 +58,7 @@ router.post('/validate-token',
 
 // Resrt password
 router.post('/reset-password/:token',
-    param('token')
-        .notEmpty().withMessage('Token is required'),
-    body('password')
-        .isLength({ min: 8}).withMessage('Password must be at least 8 characters long'),
-    body('password_confirmation').custom((value, { req }) => {
-        if(value !== req.body.password){
-            throw new Error('Passwords do not match')
-        }
-        return true
-    }),
+    validateResetPasswordInput,
     handleInputErrors,
     tokenExist,
     AuthController.resetPasswordWithToken

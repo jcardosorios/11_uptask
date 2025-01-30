@@ -36,3 +36,48 @@ export const validateStatusTask: ValidationChain[] = [
     body('status')
         .notEmpty().withMessage('Status is required'),
 ];
+
+export const validateCreateAccount: ValidationChain[] = [
+    body('name')
+    .notEmpty().withMessage('Name is required'),
+    body('password')
+        .isLength({ min: 8}).withMessage('Password must be at least 8 characters long'),
+    body('password_confirmation').custom((value, { req }) => {
+        if(value !== req.body.password){
+            throw new Error('Passwords do not match')
+        }
+        return true
+    }),
+    body('email')
+        .isEmail().withMessage('Email must be valid'),
+];
+
+export const validateTokenInput: ValidationChain[] = [
+    body('token')
+        .notEmpty().withMessage('Token is required')
+];
+
+export const validateLoginInput: ValidationChain[] = [
+    body('email')
+    .isEmail().withMessage('Email must be valid'),
+    body('password')
+    .notEmpty().withMessage('Password is required')
+];
+
+export const validateEmailInput: ValidationChain[] = [
+    body('email')
+        .isEmail().withMessage('Email must be valid')
+];
+
+export const validateResetPasswordInput: ValidationChain[] = [
+    param('token')
+        .notEmpty().withMessage('Token is required'),
+    body('password')
+        .isLength({ min: 8}).withMessage('Password must be at least 8 characters long'),
+    body('password_confirmation').custom((value, { req }) => {
+        if(value !== req.body.password){
+            throw new Error('Passwords do not match')
+        }
+        return true
+    }),
+];
