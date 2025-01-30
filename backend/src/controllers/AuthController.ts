@@ -152,6 +152,12 @@ export class AuthController {
             handleError(res, error, "Failed to confirm the account")
         }
     }
+
+    static user = async (req : Request ,res: Response)  => {
+        res.json(req.user)
+    }
+
+
     
 
 }
