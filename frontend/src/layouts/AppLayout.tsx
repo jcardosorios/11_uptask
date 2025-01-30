@@ -12,7 +12,7 @@ export default function AppLayout() {
     if(isError) {
         return <Navigate to='/auth/login' />
     }
-    return (
+    if(data) return (
     <>
         <header className='bg-gray-800 p-5'>
             <div className='max-w-screen-2xl mx-auto flex flex-col sm:flex-row justify-between items-center'>
