@@ -2,6 +2,8 @@ import mongoose, { Types } from 'mongoose';
 import Project from '../models/Project' // Asegúrate de usar las rutas correctas
 import Task, { ITask } from '../models/Task';
 import dotenv from 'dotenv'
+import User from '../models/User';
+import { hashPassword } from '../utils/auth';
 
 dotenv.config()
 
@@ -28,8 +30,9 @@ const connectDB = async () => {
 // Limpiar las colecciones
 const clearDatabase = async () => {
     try {
-        await Task.deleteMany({});
         await Project.deleteMany({});
+        await Task.deleteMany({});
+        await User.deleteMany({});
         console.log('Database cleared');
     } catch (error) {
         console.error('Error clearing database:', error);
@@ -39,21 +42,43 @@ const clearDatabase = async () => {
 
 const seedDatabase = async () => {
     try {
+        const users = await User.insertMany([
+            {
+                email: 'juako.r@gmail.com',
+                password: await hashPassword('Juako1990'),
+                name: 'Joaquin Rios',
+                confirmed: true
+            },
+            {
+                email: 'joaquin.rios.cardoso@gmail.com',
+                password: await hashPassword('12345678'),
+                name: 'Filomeno Gutierrez',
+                confirmed: true
+            },
+        ])
+
+        console.log('Users seeded')
+
+
+
         const projects = await Project.insertMany([
             {
               projectName: 'Website Redesign',
               clientName: 'Client A',
               description: 'Redesign the existing website for better UX/UI',
+              manager: users[0]._id as Types.ObjectId
             },
             {
               projectName: 'Mobile App Development',
               clientName: 'Client B',
               description: 'Develop a cross-platform mobile app',
+              manager: users[0]._id as Types.ObjectId
             },
             {
               projectName: 'API Integration',
               clientName: 'Client C',
               description: 'Integrate third-party APIs into the existing system',
+              manager: users[1]._id as Types.ObjectId
             },
         ]);
     
@@ -102,6 +127,8 @@ const runSeed = async () => {
     await clearDatabase()
     await seedDatabase()
     mongoose.connection.close();
+    console.log('DB closed')
+    console.log('Seed finished')
 }
 
 runSeed()

@@ -140,7 +140,6 @@ export async function validatePassword(req: Request, res: Response, next: NextFu
 // Validate JWT on headers
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     const bearer = req.headers.authorization
-    
     // Validate there is a bearer
     if(!bearer){
         res.status(401).json({errors: [{
@@ -148,7 +147,9 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         }]})
         return
     }
+
     const [, token] = bearer.split(' ')
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if(typeof decoded === 'object' && decoded.id){
@@ -171,9 +172,4 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             }]
         });
     }
-
-
-    next()
-
-
 }

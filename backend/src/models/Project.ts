@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types, PopulatedDoc } from "mongoose";
 import { ITask } from "./Task";
+import { IUser } from "./User";
 
 
 export interface IProject extends Document {
@@ -7,6 +8,7 @@ export interface IProject extends Document {
     clientName: string
     description: string
     tasks: PopulatedDoc<ITask & Document>[]
+    manager: PopulatedDoc<IUser & Document>
     isDeleted: boolean
     deletedAt: Date | null
 }
@@ -33,6 +35,10 @@ const ProjectSchema: Schema = new Schema({
             ref: 'Task'
         }
     ],
+    manager: {
+        type: Types.ObjectId,
+        ref: 'User'
+    },
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null }
 }, { timestamps: true })

@@ -1,15 +1,19 @@
 import type { Request, Response } from 'express'
 import Project from '../models/Project'
-import { restart } from 'pm2'
 import { handleError } from '../utils/errors'
+import User from '../models/User'
 
 export class ProjectController {  
     static createProject = async (req : Request, res: Response) => {
         const project = new Project(req.body)
+        
+        // Assign manager
+        project.manager = req.user.id
+        
         try {
             await project.save()
-            // await Project.create(req.body)
-            res.send('Project succesfully created')
+            
+            res.send('Project successfully created')
         } catch (error) {
             handleError(res, error, "Failed to create the project")
         }
