@@ -23,7 +23,8 @@ router.post('/',
 )
 
 // Get All Projects
-router.get('/', 
+router.get('/',
+    authenticate,
     ProjectController.getAllProjects
 )
 // Project Validation Middlewares

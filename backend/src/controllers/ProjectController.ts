@@ -4,6 +4,7 @@ import { handleError } from '../utils/errors'
 import User from '../models/User'
 
 export class ProjectController {  
+    // Create a new project
     static createProject = async (req : Request, res: Response) => {
         const project = new Project(req.body)
         
@@ -19,9 +20,19 @@ export class ProjectController {
         }
     }
 
+    // Fetch all manager's projects
     static getAllProjects = async (req : Request, res: Response) => {
+        const { user } = req
         try {
             const projects = await Project.find({
+                $and : [
+                    { isDeleted: false },
+                    {
+                        $or: [
+                            { manager: { $in : user.id} }
+                        ]
+                    }
+                ],
                 isDeleted: false
             }).populate('tasks')
             res.send(projects)
