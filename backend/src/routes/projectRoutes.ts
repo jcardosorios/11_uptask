@@ -6,7 +6,7 @@ import { projectExist, validateUserIsManager } from '../middleware/project'
 import { taskBelongsToProject, taskExist } from '../middleware/task'
 import { authenticate, validateUserByIdShort, validateUserShort } from '../middleware/auth'
 import { TeamMemberController } from '../controllers/TeamController'
-import { validateUserIsNotInTeam } from '../middleware/team'
+import { validateUserIsInTeam, validateUserIsNotInTeam } from '../middleware/team'
 
 const router = Router()
 
@@ -126,6 +126,7 @@ router.post('/:projectId/team',
 router.delete('/:projectId/team',
     validateIdType,
     handleInputErrors,
+    validateUserIsInTeam,
     TeamMemberController.removeUserById
 )
 
