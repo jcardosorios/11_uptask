@@ -1,5 +1,6 @@
 import type {Request, Response, NextFunction} from 'express'
 
+
 export async function validateUserIsNotInTeam(req: Request, res: Response, next: NextFunction){
     try {
         const { user, project } = req

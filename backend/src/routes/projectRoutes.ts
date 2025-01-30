@@ -123,4 +123,10 @@ router.post('/:projectId/team',
     TeamMemberController.addUserById
 )
 
+router.delete('/:projectId/team',
+    validateIdType,
+    handleInputErrors,
+    TeamMemberController.removeUserById
+)
+
 export default router

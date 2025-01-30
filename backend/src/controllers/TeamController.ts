@@ -7,8 +7,18 @@ export class TeamMemberController {
 
     static addUserById = async (req : Request, res: Response) => {
         const { project } = req
+
         project.team.push(req.user)
         await project.save()
-        res.send('User added to project')
+        res.send('User added to project successfully')
+    }
+
+    static removeUserById = async (req : Request, res: Response) => {
+        const { project } = req
+        const { id } = req.body
+
+        project.team = project.team.filter( team => team.toString() !== id)
+        await project.save()
+        res.send('User deleted from project successfully')
     }
 }
