@@ -1,11 +1,12 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import { ProjectController } from '../controllers/ProjectController'
-import { handleInputErrors, validateCreateProject, validateCreateTask, validateProjectId, validateStatusTask, validateTaskIdType } from '../middleware/validation'
+import { handleInputErrors, validateCreateProject, validateCreateTask, validateEmailInput, validateIdType, validateStatusTask } from '../middleware/validation'
 import { TaksController } from '../controllers/TaskController'
 import { projectExist, validateUserIsManager } from '../middleware/project'
 import { taskBelongsToProject, taskExist } from '../middleware/task'
-import { authenticate, userExist } from '../middleware/auth'
+import { authenticate, validateUserByIdShort, validateUserShort } from '../middleware/auth'
+import { TeamMemberController } from '../controllers/TeamController'
+import { validateUserIsNotInTeam } from '../middleware/team'
 
 const router = Router()
 
@@ -14,7 +15,7 @@ const router = Router()
 router.use(authenticate)
 
 // Validate projectId inputs
-router.param('projectId',validateProjectId)
+router.param('projectId',validateIdType)
 router.param('projectId',handleInputErrors)
 
 // Validate project exist
@@ -60,7 +61,7 @@ router.patch('/:projectId',
 /* Routes for tasks */
 
 // Task Validation Middlewares
-router.param('taskId', validateTaskIdType)
+router.param('taskId', validateIdType)
 router.param('taskId', handleInputErrors)
 
 // Validate task exist
@@ -104,6 +105,22 @@ router.post('/:projectId/tasks/:taskId/status',
     validateStatusTask,
     handleInputErrors,
     TaksController.updateStatus
+)
+
+/** Routes for teams */
+router.post('/:projectId/team/find',
+    validateEmailInput,
+    handleInputErrors,
+    validateUserShort,
+    TeamMemberController.findMemberByEmail
+)
+
+router.post('/:projectId/team',
+    validateIdType,
+    handleInputErrors,
+    validateUserByIdShort,
+    validateUserIsNotInTeam,
+    TeamMemberController.addUserById
 )
 
 export default router

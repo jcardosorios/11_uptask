@@ -10,8 +10,8 @@ export const handleInputErrors = (req : Request, res: Response, next : NextFunct
     next()
 
 }
-export const validateProjectId = param('projectId')
-    .isMongoId().withMessage('Invalid Project ID');
+export const validateIdType = param('projectId')
+    .isMongoId().withMessage('Invalid ID');
 
 export const validateCreateProject: ValidationChain[] = [
     body('projectName')
@@ -22,8 +22,6 @@ export const validateCreateProject: ValidationChain[] = [
         .notEmpty().withMessage('Description is required'),
 ];
 
-export const validateTaskIdType = param('taskId')
-    .isMongoId().withMessage('Invalid Task ID');
 
 export const validateCreateTask: ValidationChain[] = [
     body('taskName')

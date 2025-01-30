@@ -9,6 +9,7 @@ export interface IProject extends Document {
     description: string
     tasks: PopulatedDoc<ITask & Document>[]
     manager: PopulatedDoc<IUser & Document>
+    team: PopulatedDoc<IUser & Document>[]
     isDeleted: boolean
     deletedAt: Date | null
 }
@@ -39,6 +40,12 @@ const ProjectSchema: Schema = new Schema({
         type: Types.ObjectId,
         ref: 'User'
     },
+    team: [
+        {
+            type: Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null }
 }, { timestamps: true })

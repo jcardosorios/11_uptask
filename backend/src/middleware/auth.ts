@@ -40,9 +40,8 @@ export async function tokenExist(req: Request, res: Response, next: NextFunction
 }
 
 // Validate that user exist
-export async function userExist(req: Request, res: Response, next: NextFunction){
+export async function validateUser(req: Request, res: Response, next: NextFunction){
     try {
-
         const { email } = req.body
         // Search existing user
         const user = await User.findOne({email})
@@ -62,6 +61,57 @@ export async function userExist(req: Request, res: Response, next: NextFunction)
         next(error)
     }
 }
+
+export async function validateUserShort(req: Request, res: Response, next: NextFunction){
+    try {
+        const { email } = req.body
+        // Search existing user
+        const user = await User.findOne({ $and : [
+            { email },
+            { isDeleted: false }
+        ]}).select('id email name')
+        if (!user || user.isDeleted){
+            res.status(404).json({errors: [{
+                type: "field",
+                value: email,
+                msg: 'User not found',
+                path: "email",
+                location: "body"
+            }]})
+            return
+        }
+        req.user = user
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function validateUserByIdShort(req: Request, res: Response, next: NextFunction){
+    try {
+        const { id } = req.body
+        // Search existing user
+        const user = await User.findOne({ $and : [
+            { _id: id },
+            { isDeleted: false }
+        ]}).select('id')
+        if (!user || user.isDeleted){
+            res.status(404).json({errors: [{
+                type: "field",
+                value: id,
+                msg: 'User not found',
+                path: "id",
+                location: "body"
+            }]})
+            return
+        }
+        req.user = user
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 // Validate if user is not confirmed
 export async function checkUserNotConfirmed(req: Request, res: Response, next: NextFunction){
