@@ -1,103 +1,90 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
 import { ProjectController } from '../controllers/ProjectController'
-import { handleInputErrors } from '../middleware/validation'
+import { handleInputErrors, validateCreateProject, validateCreateTask, validateProjectId, validateStatusTask, validateTaskIdType } from '../middleware/validation'
 import { TaksController } from '../controllers/TaskController'
-import { projectExist } from '../middleware/project'
+import { projectExist, validateUserIsManager } from '../middleware/project'
 import { taskBelongsToProject, taskExist } from '../middleware/task'
 import { authenticate, userExist } from '../middleware/auth'
 
 const router = Router()
 
+
+// Authenticate user
+router.use(authenticate)
+
+// Validate projectId inputs
+router.param('projectId',validateProjectId)
+router.param('projectId',handleInputErrors)
+
+// Validate project exist
+router.param('projectId', projectExist)
+
 // Create Project
 router.post('/',
-    authenticate,
-    body('projectName')
-        .notEmpty().withMessage('Project name is required'),
-    body('clientName')
-        .notEmpty().withMessage('Client name is required'),
-    body('description')
-        .notEmpty().withMessage('Description is required'),
+    validateCreateProject,
     handleInputErrors,
     ProjectController.createProject
 )
 
 // Get All Projects
-router.get('/',
-    authenticate,
-    ProjectController.getAllProjects
-)
-// Project Validation Middlewares
-router.param('projectId',
-    param('projectId').isMongoId().withMessage('Invalid Project ID')
-)
-router.param('projectId',
-    handleInputErrors
-)
-router.param('projectId', projectExist)
+router.get('/',ProjectController.getAllProjects)
 
 // Get one project by ID
-router.get('/:projectId', 
+router.get('/:projectId',
+    validateUserIsManager,
     ProjectController.getProjectByID
 )
 
 // Update project
-router.put('/:projectId', 
-    body('projectName')
-        .notEmpty().withMessage('Project name is required'),
-    body('clientName')
-        .notEmpty().withMessage('Client name is required'),
-    body('description')
-        .notEmpty().withMessage('Description is required'),
+router.put('/:projectId',
+    validateUserIsManager,
+    validateCreateProject,
     handleInputErrors,
     ProjectController.updateProject
 )
 
 // Delete project
 router.delete('/:projectId', 
+    validateUserIsManager,
     ProjectController.deleteProject
 )
 
 // Soft Delete project
-router.patch('/:projectId', 
+router.patch('/:projectId',
+    validateUserIsManager,
     ProjectController.softDeleteProject
 )
 
 
 /* Routes for tasks */
 
+// Task Validation Middlewares
+router.param('taskId', validateTaskIdType)
+router.param('taskId', handleInputErrors)
+
+// Validate task exist
+router.param('taskId', taskExist)
+
+// Validate Task belongs to project
+router.param('taskId', taskBelongsToProject)
+
 // Create Task
 router.post('/:projectId/tasks', 
-    body('taskName')
-        .notEmpty().withMessage('Task name is required'),
-    body('description')
-        .notEmpty().withMessage('Description is required'),
+    validateCreateTask,
     handleInputErrors,
     TaksController.createTask
 )
 
 // Get all Tasks
-router.get('/:projectId/tasks', 
-    TaksController.getAllTasks
-)
-
-// Task Validation Middlewares
-router.param('taskId', param('taskId').isMongoId().withMessage('Invalid Task ID'))
-router.param('taskId', handleInputErrors)
-router.param('taskId', taskExist)
-router.param('taskId', taskBelongsToProject)
+router.get('/:projectId/tasks', TaksController.getAllTasks)
 
 // Get one task by ID
-router.get('/:projectId/tasks/:taskId',
-    TaksController.getTaskByID
-)
+router.get('/:projectId/tasks/:taskId',TaksController.getTaskByID)
 
 // Update task by ID
 router.put('/:projectId/tasks/:taskId',
-    body('taskName')
-        .notEmpty().withMessage('Task name is required'),
-    body('description')
-        .notEmpty().withMessage('Description is required'),
+    validateCreateTask,
     handleInputErrors,
     TaksController.updateTask
 )
@@ -114,7 +101,7 @@ router.delete('/:projectId/tasks/:taskId',
 
 // Update State
 router.post('/:projectId/tasks/:taskId/status',
-    body('status').notEmpty().withMessage('Status is required'),
+    validateStatusTask,
     handleInputErrors,
     TaksController.updateStatus
 )
