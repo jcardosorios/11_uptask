@@ -72,3 +72,12 @@ export async function resetPasswordWithToken({formData, token}: {formData: NewPa
         handleErrorsAxios(error)
     }
 }
+
+export async function getUser() {
+    try {
+        const { data } = await api.get('/auth/user')
+        return data
+    } catch (error) {
+        handleErrorsAxios(error)
+    }
+}
