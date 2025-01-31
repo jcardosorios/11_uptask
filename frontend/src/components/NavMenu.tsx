@@ -17,6 +17,7 @@ export default function NavMenu({ name } : NavMenuProps) {
   const logout = () => {
     localStorage.removeItem('AUTH_TOKEN')
     queryClient.removeQueries({queryKey:['user']})
+    queryClient.removeQueries({queryKey:['projects']})
     navigate('/auth/login')
 
   }

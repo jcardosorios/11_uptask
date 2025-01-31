@@ -4,7 +4,7 @@ import EditTaskData from "@/components/tasks/EditTaskData"
 import TaskList from "@/components/tasks/TaskList"
 import TaskModalDetails from "@/components/tasks/TaskModalDetails"
 import { useQuery } from "@tanstack/react-query"
-import { Navigate, useNavigate, useParams } from "react-router-dom"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
 export default function ProjectDetailsView() {
     const navigate = useNavigate()
@@ -32,6 +32,12 @@ export default function ProjectDetailsView() {
                     className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
                     onClick={() => navigate(location.pathname + '?newTask=true')}
                 >Add new Task</button>
+                <Link
+                    className="bg-fuchsia-600 hover:bg-fuchsia-700 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
+                    to={'team'}
+                >
+                    Collaborators
+                </Link>
             </nav>
 
 

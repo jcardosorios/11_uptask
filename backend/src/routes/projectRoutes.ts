@@ -115,6 +115,10 @@ router.post('/:projectId/team/find',
     TeamMemberController.findMemberByEmail
 )
 
+router.get('/:projectId/team',
+    TeamMemberController.getProjectTeam
+)
+
 router.post('/:projectId/team',
     validateIdType,
     handleInputErrors,
@@ -129,5 +133,6 @@ router.delete('/:projectId/team',
     validateUserIsInTeam,
     TeamMemberController.removeUserById
 )
+
 
 export default router

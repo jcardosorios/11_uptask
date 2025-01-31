@@ -13,6 +13,11 @@ export class TeamMemberController {
         res.send('User added to project successfully')
     }
 
+    static getProjectTeam = async (req : Request, res: Response) => {
+        const { team } = await req.project.populate('team', 'id name email')
+        res.json(team)
+    }
+
     static removeUserById = async (req : Request, res: Response) => {
         const { project } = req
         const { id } = req.body
@@ -21,4 +26,5 @@ export class TeamMemberController {
         await project.save()
         res.send('User deleted from project successfully')
     }
+
 }
