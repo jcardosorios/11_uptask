@@ -1,6 +1,16 @@
 import { Router } from 'express'
 import { ProjectController } from '../controllers/ProjectController'
-import { handleInputErrors, validateCreateProject, validateCreateTask, validateEmailInput, validateIdType, validateStatusTask } from '../middleware/validation'
+import { 
+    handleInputErrors, 
+    validateCreateProject, 
+    validateCreateTask, 
+    validateEmailInput, 
+    validateProjectIdType, 
+    validateStatusTask, 
+    validateTaskIdType, 
+    validateUserIdTypeBody, 
+    validateUserIdTypeParam 
+} from '../middleware/validation'
 import { TaksController } from '../controllers/TaskController'
 import { projectExist, validateUserIsManager } from '../middleware/project'
 import { taskBelongsToProject, taskExist } from '../middleware/task'
@@ -15,7 +25,7 @@ const router = Router()
 router.use(authenticate)
 
 // Validate projectId inputs
-router.param('projectId',validateIdType)
+router.param('projectId',validateProjectIdType)
 router.param('projectId',handleInputErrors)
 
 // Validate project exist
@@ -61,7 +71,7 @@ router.patch('/:projectId',
 /* Routes for tasks */
 
 // Task Validation Middlewares
-router.param('taskId', validateIdType)
+router.param('taskId', validateTaskIdType)
 router.param('taskId', handleInputErrors)
 
 // Validate task exist
@@ -108,6 +118,7 @@ router.post('/:projectId/tasks/:taskId/status',
 )
 
 /** Routes for teams */
+// Find an user by email
 router.post('/:projectId/team/find',
     validateEmailInput,
     handleInputErrors,
@@ -115,21 +126,24 @@ router.post('/:projectId/team/find',
     TeamMemberController.findMemberByEmail
 )
 
+// Get team for a project
 router.get('/:projectId/team',
     TeamMemberController.getProjectTeam
 )
 
+// Add user by ID in body
 router.post('/:projectId/team',
-    validateIdType,
+    validateUserIdTypeBody,
     handleInputErrors,
     validateUserByIdShort,
     validateUserIsNotInTeam,
     TeamMemberController.addUserById
 )
 
-router.delete('/:projectId/team',
-    validateIdType,
+router.delete('/:projectId/team/:userId',
+    validateUserIdTypeParam,
     handleInputErrors,
+    validateUserByIdShort,
     validateUserIsInTeam,
     TeamMemberController.removeUserById
 )

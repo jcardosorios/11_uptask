@@ -89,19 +89,20 @@ export async function validateUserShort(req: Request, res: Response, next: NextF
 
 export async function validateUserByIdShort(req: Request, res: Response, next: NextFunction){
     try {
-        const { id } = req.body
+        const userId = req.params.userId || req.body.userId
         // Search existing user
         const user = await User.findOne({ $and : [
-            { _id: id },
+            { _id: userId },
             { isDeleted: false }
         ]}).select('id')
-        if (!user || user.isDeleted){
+    
+        if (!user){
             res.status(404).json({errors: [{
                 type: "field",
-                value: id,
+                value: userId,
                 msg: 'User not found',
                 path: "id",
-                location: "body"
+                location: req.body ? "body" : "params"
             }]})
             return
         }

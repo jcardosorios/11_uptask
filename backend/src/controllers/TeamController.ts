@@ -20,9 +20,9 @@ export class TeamMemberController {
 
     static removeUserById = async (req : Request, res: Response) => {
         const { project } = req
-        const { id } = req.body
+        const { userId } = req.params
 
-        project.team = project.team.filter( team => team.toString() !== id)
+        project.team = project.team.filter( team => team.toString() !== userId)
         await project.save()
         res.send('User deleted from project successfully')
     }

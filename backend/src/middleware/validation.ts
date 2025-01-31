@@ -10,7 +10,16 @@ export const handleInputErrors = (req : Request, res: Response, next : NextFunct
     next()
 
 }
-export const validateIdType = param('projectId')
+export const validateProjectIdType = param('projectId')
+    .isMongoId().withMessage('Invalid ID');
+
+export const validateTaskIdType = param('taskId')
+    .isMongoId().withMessage('Invalid ID');
+
+export const validateUserIdTypeBody = body('userId')
+    .isMongoId().withMessage('Invalid ID');
+
+export const validateUserIdTypeParam = param('userId')
     .isMongoId().withMessage('Invalid ID');
 
 export const validateCreateProject: ValidationChain[] = [

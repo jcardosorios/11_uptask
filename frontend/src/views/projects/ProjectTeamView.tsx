@@ -1,10 +1,11 @@
 import { Fragment } from "react"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
-import { getProjectTeam } from "@/api/TeamAPI"
+import { getProjectTeam, removeMemberFromProject } from "@/api/TeamAPI"
 import AddMemberModal from "@/components/team/AddMemberModal"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
+import { toast } from "react-toastify"
 
 
 export default function ProjectTeamView() {
@@ -12,15 +13,30 @@ export default function ProjectTeamView() {
     const params = useParams()
     const projectId = params.projectId!
 
+    // Get members of team Query
     const { data, isLoading, isError} = useQuery({
         queryKey: ['projectTeam', projectId],
         queryFn: () => getProjectTeam(projectId),
         retry: false
     })
 
+    // Remove member from team mutation
+    const queryClient = useQueryClient()
+    const { mutate} = useMutation({
+        mutationFn: removeMemberFromProject,
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey : ['projectTeam' , projectId]})
+            toast.success(data)
+        },
+        onError: (errors: string[]) => {
+            errors.forEach( (message) => toast.error(message))
+        }
+    })
+
+
     if(isLoading) return 'Loading...'
     if(isError) return <Navigate to='/404' />
-    console.log(data)
+
     if (data) return (
     <>
     <h1 className="text-5xl font-black">Manage your team</h1>
@@ -78,6 +94,11 @@ export default function ProjectTeamView() {
                                         <button
                                             type='button'
                                             className='block px-3 py-1 text-sm leading-6 text-red-500'
+                                            id={member._id}
+                                            onClick={ () => mutate({
+                                                projectId,
+                                                userId: member._id
+                                            })}
                                         >
                                             Remove from project
                                         </button>

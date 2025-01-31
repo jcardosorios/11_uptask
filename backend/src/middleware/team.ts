@@ -22,8 +22,8 @@ export async function validateUserIsNotInTeam(req: Request, res: Response, next:
 export async function validateUserIsInTeam(req: Request, res: Response, next: NextFunction){
     try {
         const { project } = req
-        const { id } = req.body
-        const isIncluded = project.team.some( team => team.toString() === id)
+        const { userId } = req.params
+        const isIncluded = project.team.some( team => team.toString() === userId)
         
         if (!isIncluded){
             res.status(409).json({errors: [{
