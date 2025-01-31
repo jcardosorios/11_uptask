@@ -1,7 +1,7 @@
 
 import api from "@/lib/axios";
 import { handleErrorsAxios } from "@/lib/handleErrors";
-import { Project, TeamMember, TeamMemberFormData, teamMemberSchema } from "../types";
+import { Project, TeamMember, TeamMemberFormData, teamMemberSchema, teamSchema } from "../types";
 
 type TeamAPIType = {
     formData : TeamMemberFormData
@@ -27,6 +27,20 @@ export async function addUserToProject( { projectId, userId } : {projectId : Pro
         const url = `/projects/${projectId}/team`
         const { data } = await api.post<string>(url, {id : userId})
         return data
+
+    } catch (error) {
+        handleErrorsAxios(error)
+    }
+}
+
+export async function getProjectTeam(projectId: Project['_id']) {
+    try {
+        const url = `/projects/${projectId}/team`
+        const { data } = await api.get<string>(url)
+        const response = teamSchema.safeParse(data)
+        if(response.success){
+            return response.data
+        }
 
     } catch (error) {
         handleErrorsAxios(error)
