@@ -1,33 +1,48 @@
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ErrorMessage from "../ErrorMessage";
-import { TeamMemberFormData } from "@/types/index";
+import { TeamMemberFormData, User } from "@/types/index";
 import { findUserByEmail } from "@/api/TeamAPI";
 import SearchResult from "./SearchResult";
+import { toast } from "react-toastify";
 
 export default function AddMemberForm() {
-    const initialValues: TeamMemberFormData = {
-        email: ''
-    }
+    // Get projectId
     const params = useParams()
     const projectId = params.projectId!
 
+    const initialValues: TeamMemberFormData = {
+        email: ''
+    }
+
+    // Instant queryClient
+    const queryClient = useQueryClient()
+    
+    // useForm
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues: initialValues })
 
+    // Mutation to find user
     const mutation = useMutation({
         mutationFn: findUserByEmail,
     })
 
+    // Handler
     const handleSearchUser = async (formData : TeamMemberFormData) => {
+        const currentUser = queryClient.getQueryData<User>(["user"]);
+        if(currentUser?.email === formData.email) return toast.error("You can't add yourself to the project")
+            
         const data = {projectId, formData}
         mutation.mutate(data)
     }
 
+    // Reset
     const resetData = () => {
         reset()
         mutation.reset()
     }
+
+    
 
     return (
         <>

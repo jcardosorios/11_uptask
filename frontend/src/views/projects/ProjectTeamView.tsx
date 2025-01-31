@@ -1,6 +1,6 @@
 import { Fragment } from "react"
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
-import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { getProjectTeam, removeMemberFromProject } from "@/api/TeamAPI"
 import AddMemberModal from "@/components/team/AddMemberModal"
@@ -115,7 +115,7 @@ export default function ProjectTeamView() {
     )}
 
 
-    <AddMemberModal />
+    <AddMemberModal/>
     </>
   )
 }
