@@ -6,6 +6,7 @@ import {
     validateCreateProject, 
     validateCreateTask, 
     validateEmailInput, 
+    validateNoteIdType, 
     validateProjectIdType, 
     validateStatusTask, 
     validateTaskIdType, 
@@ -19,6 +20,7 @@ import { authenticate, validateUserByIdShort, validateUserShort } from '../middl
 import { TeamMemberController } from '../controllers/TeamController'
 import { validateUserIsInTeam, validateUserIsNotInTeam } from '../middleware/team'
 import { NoteController } from '../controllers/NoteController'
+import { isCreator, noteExist } from '../middleware/note'
 
 const router = Router()
 
@@ -156,11 +158,31 @@ router.delete('/:projectId/team/:userId',
 
 /** Routes for Notes */
 
+// Validate noteId input
+router.param('noteId',validateNoteIdType)
+router.param('noteId',handleInputErrors)
+
+// Validate note exist
+router.param('noteId', noteExist)
+
+// Create note
 router.post('/:projectId/tasks/:taskId/notes',
     validateCreateNote,
     handleInputErrors,
     NoteController.createNote
 )
+
+// Get notes
+router.get('/:projectId/tasks/:taskId/notes',
+    NoteController.getTaskNotes
+)
+
+// Delete notes
+router.delete('/:projectId/tasks/:taskId/notes/:noteId',
+    isCreator,
+    NoteController.deleteTaskNote
+)
+
 
 
 export default router

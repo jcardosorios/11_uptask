@@ -15,11 +15,14 @@ export const validateProjectIdType = param('projectId')
 
 export const validateTaskIdType = param('taskId')
     .isMongoId().withMessage('Invalid ID');
-
+    
 export const validateUserIdTypeBody = body('userId')
     .isMongoId().withMessage('Invalid ID');
 
 export const validateUserIdTypeParam = param('userId')
+    .isMongoId().withMessage('Invalid ID');
+
+export const validateNoteIdType = param('noteId')
     .isMongoId().withMessage('Invalid ID');
 
 export const validateCreateProject: ValidationChain[] = [
