@@ -2,19 +2,23 @@
 
 import { getProjects } from "@/api/ProjectAPI"
 import DashboardProjectItem from "@/components/projects/DashboardProjectItem"
+import { useAuth } from "@/hooks/useAuth"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
 
 
 export default function DashboardView() {
+  const { data: user, isLoading: authLoading } = useAuth()
+
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: getProjects
   })
 
-  if(isLoading) return 'Cargando...'
 
-  if(data) return (
+  if(isLoading || authLoading) return 'Cargando...'
+
+  if(data && user) return (
     <>
       <h1 className="text-5xl font-black">My Projects</h1>
       <p className="text-2xl font-light text-gray-500 mt-5">Manage your projects</p>
@@ -29,7 +33,7 @@ export default function DashboardView() {
         <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
           {data.map((project) => (
             <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10">
-              <DashboardProjectItem project={project} />
+              <DashboardProjectItem project={project} user={user} />
             </li>
           ))}
         </ul>
