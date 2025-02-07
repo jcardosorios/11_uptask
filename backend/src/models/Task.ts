@@ -16,7 +16,10 @@ export interface ITask extends Document {
     description: string
     project: Types.ObjectId
     status: TaskStatus
-    completedBy: Types.ObjectId
+    completedBy: {
+        user: Types.ObjectId
+        status: TaskStatus
+    }[]
     isDeleted: boolean
     deletedAt: Date | null
 }
@@ -43,11 +46,18 @@ const TaskSchema: Schema = new Schema({
         enum: Object.values(taskStatus),
         default: taskStatus.PEDING
     },
-    completedBy : {
-        type: Types.ObjectId,
-        ref: 'User',
-        default: null
-    },
+    completedBy : [{
+        user : {
+            type: Types.ObjectId,
+            ref: 'User',
+            default: null
+        },
+        status: {
+            type: String,
+            enum: Object.values(taskStatus),
+            default: taskStatus.PEDING
+        }
+    }],
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null }
 }, {timestamps: true})
