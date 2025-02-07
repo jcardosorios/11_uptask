@@ -34,7 +34,8 @@ export class TaksController {
     }
 
     static getTaskByID = async (req : Request, res: Response) => {
-        const { task } = req
+        const task = await Task.findById(req.task.id)
+                .populate({path:'completedBy', select: 'id name email'})
         try {
             res.send(task)
         } catch (error) {
@@ -86,11 +87,16 @@ export class TaksController {
     }
 
     static updateStatus = async (req : Request, res: Response) => {
-        const { task } = req
+        const { task, user } = req
         const { status } = req.body
         
         try {
             task.status = status
+            if(status === 'pending') {
+                task.completedBy = null
+            } else {
+                task.completedBy = user.id
+            }
             await task.save()
             
             res.send('Status Successfully Updated')
