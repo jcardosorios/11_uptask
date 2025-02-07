@@ -88,3 +88,8 @@ export const validateResetPasswordInput: ValidationChain[] = [
         return true
     }),
 ];
+
+export const validateCreateNote: ValidationChain[] = [
+    body('content')
+        .notEmpty().withMessage('Note content is required')
+]

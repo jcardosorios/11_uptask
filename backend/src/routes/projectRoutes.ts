@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { ProjectController } from '../controllers/ProjectController'
 import { 
     handleInputErrors, 
+    validateCreateNote, 
     validateCreateProject, 
     validateCreateTask, 
     validateEmailInput, 
@@ -17,6 +18,7 @@ import { hasAuthorization, taskBelongsToProject, taskExist } from '../middleware
 import { authenticate, validateUserByIdShort, validateUserShort } from '../middleware/auth'
 import { TeamMemberController } from '../controllers/TeamController'
 import { validateUserIsInTeam, validateUserIsNotInTeam } from '../middleware/team'
+import { NoteController } from '../controllers/NoteController'
 
 const router = Router()
 
@@ -150,6 +152,14 @@ router.delete('/:projectId/team/:userId',
     validateUserByIdShort,
     validateUserIsInTeam,
     TeamMemberController.removeUserById
+)
+
+/** Routes for Notes */
+
+router.post('/:projectId/tasks/:taskId/notes',
+    validateCreateNote,
+    handleInputErrors,
+    NoteController.createNote
 )
 
 

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import Project from '../models/Project'
 import { handleError } from '../utils/errors'
-import User from '../models/User'
+
 
 export class ProjectController {  
     // Create a new project

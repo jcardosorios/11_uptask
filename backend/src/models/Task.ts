@@ -22,6 +22,7 @@ export interface ITask extends Document {
     }[]
     isDeleted: boolean
     deletedAt: Date | null
+    notes: Types.ObjectId[]
 }
 
 const TaskSchema: Schema = new Schema({
@@ -58,6 +59,12 @@ const TaskSchema: Schema = new Schema({
             default: taskStatus.PEDING
         }
     }],
+    notes: [
+        {
+            type: Types.ObjectId,
+            ref: 'Note'
+        }
+    ],
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null }
 }, {timestamps: true})

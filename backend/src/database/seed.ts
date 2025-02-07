@@ -55,6 +55,12 @@ const seedDatabase = async () => {
                 name: 'Filomeno Gutierrez',
                 confirmed: true
             },
+            {
+                email: 'joaquin.cardoso.r@gmail.com',
+                password: await hashPassword('12345678'),
+                name: 'Eustaquio Ramirez',
+                confirmed: true
+            },
         ])
 
         console.log('Users seeded')
@@ -66,19 +72,22 @@ const seedDatabase = async () => {
               projectName: 'Website Redesign',
               clientName: 'Client A',
               description: 'Redesign the existing website for better UX/UI',
-              manager: users[0]._id as Types.ObjectId
+              manager: users[0]._id as Types.ObjectId,
+              team: [users[1]._id as Types.ObjectId, users[2]._id as Types.ObjectId]
             },
             {
               projectName: 'Mobile App Development',
               clientName: 'Client B',
               description: 'Develop a cross-platform mobile app',
-              manager: users[0]._id as Types.ObjectId
+              manager: users[0]._id as Types.ObjectId,
+              team: [users[1]._id as Types.ObjectId]
             },
             {
               projectName: 'API Integration',
               clientName: 'Client C',
               description: 'Integrate third-party APIs into the existing system',
-              manager: users[1]._id as Types.ObjectId
+              manager: users[1]._id as Types.ObjectId,
+              team: [users[0]._id as Types.ObjectId]
             },
         ]);
     
