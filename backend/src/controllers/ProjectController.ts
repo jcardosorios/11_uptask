@@ -29,7 +29,8 @@ export class ProjectController {
                     { isDeleted: false },
                     {
                         $or: [
-                            { manager: { $in : user.id} }
+                            { manager: { $in : user.id} },
+                            { team: { $in: user.id}}
                         ]
                     }
                 ],

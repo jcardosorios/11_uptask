@@ -35,10 +35,10 @@ export async function projectExist(req: Request, res: Response, next: NextFuncti
 
 export async function validateUserIsManager(req: Request, res: Response, next: NextFunction){
     try {
-        const { manager } = req.project
+        const { manager, team } = req.project
         const { id } = req.user
 
-        if(manager.toString() !== id.toString()){
+        if(manager.toString() !== id.toString() && !team.includes(id)){
             res.status(401).json({errors: [{
                 type: "field",
                 msg: 'Unauthorized action',
