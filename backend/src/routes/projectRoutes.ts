@@ -13,7 +13,7 @@ import {
 } from '../middleware/validation'
 import { TaksController } from '../controllers/TaskController'
 import { projectExist, validateUserIsManager } from '../middleware/project'
-import { taskBelongsToProject, taskExist } from '../middleware/task'
+import { hasAuthorization, taskBelongsToProject, taskExist } from '../middleware/task'
 import { authenticate, validateUserByIdShort, validateUserShort } from '../middleware/auth'
 import { TeamMemberController } from '../controllers/TeamController'
 import { validateUserIsInTeam, validateUserIsNotInTeam } from '../middleware/team'
@@ -81,7 +81,8 @@ router.param('taskId', taskExist)
 router.param('taskId', taskBelongsToProject)
 
 // Create Task
-router.post('/:projectId/tasks', 
+router.post('/:projectId/tasks',
+    hasAuthorization,
     validateCreateTask,
     handleInputErrors,
     TaksController.createTask
@@ -95,6 +96,7 @@ router.get('/:projectId/tasks/:taskId',TaksController.getTaskByID)
 
 // Update task by ID
 router.put('/:projectId/tasks/:taskId',
+    hasAuthorization,
     validateCreateTask,
     handleInputErrors,
     TaksController.updateTask
@@ -102,11 +104,13 @@ router.put('/:projectId/tasks/:taskId',
 
 // Soft Delete task by ID
 router.patch('/:projectId/tasks/:taskId',
+    hasAuthorization,
     TaksController.softDeleteTask
 )
 
 // Delete task by ID
 router.delete('/:projectId/tasks/:taskId',
+    hasAuthorization,
     TaksController.deleteTask
 )
 
