@@ -11,17 +11,8 @@ import { generateJWT } from '../utils/jwt'
 export class AuthController {
     static createAccount = async (req : Request ,res: Response)  => {
         try {
-            const { password, email } = req.body
-
-            // Prevent duplicated
-            // TODO : create and move to middleware
-            const userExist = await User.findOne({email})
-            if(userExist){
-                const error = new Error('User already exist')
-                res.status(409).json({ errors: [{msg : error.message}]})
-                return
-            }
-            
+            const { password } = req.body
+    
             // Create a user
             const user = new User(req.body)
 
@@ -158,6 +149,19 @@ export class AuthController {
     }
 
 
-    
+    static updateProfile = async (req : Request ,res: Response)  => {
+        const { name, email} = req.body
+        const { user } = req
+
+        user.name = name
+        user.email = email
+        
+        try {
+            await user.save()
+            res.send('Profile updated succesfully')
+        } catch (error) {
+            handleError(res, error, "Failed to update profile")
+        }
+    }
 
 }

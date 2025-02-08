@@ -96,3 +96,10 @@ export const validateCreateNote: ValidationChain[] = [
     body('content')
         .notEmpty().withMessage('Note content is required')
 ]
+
+export const validateProfileInput: ValidationChain[] = [
+    body('name')
+    .notEmpty().withMessage('Name is required'),
+    body('email')
+        .isEmail().withMessage('Email must be valid'),
+];

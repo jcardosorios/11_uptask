@@ -39,6 +39,28 @@ export async function tokenExist(req: Request, res: Response, next: NextFunction
     }
 }
 
+// Validate that user not exist already
+export async function validateUserExist(req: Request, res: Response, next: NextFunction){
+    try {
+        const { email } = req.body
+
+        const userExist = await User.findOne({email})
+        if(userExist){
+            if(req.user && req.user.id.toString() === userExist.id.toString()) {
+                next()
+                return
+            } else {
+                const error = new Error('User already exist')
+                res.status(409).json({ errors: [{msg : error.message}]})
+                return
+            }
+        }
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
 // Validate that user exist
 export async function validateUser(req: Request, res: Response, next: NextFunction){
     try {
