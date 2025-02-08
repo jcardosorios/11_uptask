@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { formatDate } from '@/utils/utils';
 import { statusTranslations } from "@/locales/en"
 import { TaskStatus } from '@/types/index';
+import NotesPanel from '../notes/NotesPanel';
 
 
 
@@ -123,21 +124,26 @@ export default function TaskModalDetails() {
                                         </select>
                                     </div>
                                     {/* Changes history */}
-                                    <p className='text-lg text-slate-500 mb-2'>Change history:</p>
-                                    <ul className='list-decimal'>
-                                    { data.completedBy.map( (activityLog) => (
-                                        typeof activityLog?.user === 'object' && (
-                                            <li key={activityLog._id}>
-                                                <span className='font-bold text-slate-600'>
-                                                    {statusTranslations[activityLog.status]} by: {''}
-                                                </span>
-                                                {activityLog.user.name}
-                                            </li>
-
-                                        )
-                                    ))}
-                                    </ul>
-
+                                    {data.completedBy.length !== 0 ? (
+                                        <>
+                                            <p className='font-bold text-2xl text-slate-600 my-5'>Change history:</p>
+                                            <ul className='list-decimal mb-5'>
+                                            { data.completedBy.map( (activityLog) => (
+                                                typeof activityLog?.user === 'object' && (
+                                                    <li key={activityLog._id}>
+                                                        <span className='font-bold text-slate-600'>
+                                                            {statusTranslations[activityLog.status]} by: {''}
+                                                        </span>
+                                                        {activityLog.user.name}
+                                                    </li>
+                                                )
+                                            ))}
+                                            </ul>
+                                        </>
+                                    ) : (
+                                       null
+                                    )}
+                                    <NotesPanel notes={data.notes}/>
                                 </DialogPanel>
                             </TransitionChild>
                         </div>

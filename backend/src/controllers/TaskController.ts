@@ -36,10 +36,14 @@ export class TaksController {
     static getTaskByID = async (req : Request, res: Response) => {
         const task = await Task.findById(req.task.id)
                 .populate({path:'completedBy.user', select: 'id name email'})
-                .populate({path:'notes', populate: {
-                    path: 'createdBy',
-                    select: 'id name email'
-                }})
+                .populate({
+                    path:'notes',
+                    options: { sort: { createdAt: -1 }},
+                    populate: {
+                        path: 'createdBy',
+                        select: 'id name email'
+                    }
+                })
         try {
             res.send(task)
         } catch (error) {
