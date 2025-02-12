@@ -1,5 +1,6 @@
 import { CorsOptions } from 'cors'
 
+
 export const corsConfig: CorsOptions = {
     origin: function(origin, callback) {
 
@@ -7,6 +8,10 @@ export const corsConfig: CorsOptions = {
         if(process.argv[2] == '--api'){
             whitelist.push(undefined)
         }
+
+        console.log("Origin:", origin)
+        console.log("Whitelist:", whitelist)
+
         if(whitelist.includes(origin)){
             callback(null, true)
         } else {
