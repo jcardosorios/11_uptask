@@ -17,7 +17,7 @@ export default function DashboardView() {
   })
 
 
-  if(isLoading || authLoading) return 'Cargando...'
+  if(isLoading || authLoading) return 'Loading...'
 
   if(data && user) return (
     <>
