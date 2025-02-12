@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
     "dev:api": "nodemon --exec ts-node src/index.ts --api",
-    "seed": "npx ts-node src/database/seed.ts"
+    "seed": "npx ts-node src/database/seed.ts",
+    "build":"tsc",
+    "start" : "node ./dist/index.js"
   },
   "author": "Joaquin Rios Cardoso",
   "license": "ISC",
