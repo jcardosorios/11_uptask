@@ -29,16 +29,12 @@ export class AuthEmail {
 
         // Read the HTML template file
         const templatePath = path.join(__dirname, './templates/emailConfirmation.html');
-        console.log(templatePath)
+        console.log('Ruta del archivo:', __dirname);
 
+        // Si quieres la ruta completa del archivo, puedes usar path.join
+        const filePath = path.join(__dirname, 'AuthEmail.js');
+        console.log('Ruta completa del archivo:', filePath);
 
-        fs.readdir(templatePath, (err, files) => {
-            if (err) {
-              console.error('Error leyendo la carpeta:', err);
-            } else {
-              console.log('Archivos en la carpeta:', files);
-            }
-          });
 
         const emailTemplate = fs.readFileSync(templatePath, 'utf8');
 
