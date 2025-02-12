@@ -76,7 +76,7 @@ TaskSchema.pre("deleteOne", { document: true, query: false }, async function (ne
     if(!taskId) return
     await Note.deleteMany({task: taskId})
     next()
-  });
+});
 
 const Task = mongoose.model<ITask>('Task', TaskSchema)
 export default Task
