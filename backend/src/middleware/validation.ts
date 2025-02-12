@@ -113,6 +113,11 @@ export const validatePasswordInput: ValidationChain[] = [
         if(value !== req.body.new_password){
             throw new Error('Passwords do not match')
         }
-    return true
-}),
+        return true
+    }),
+];
+
+export const validatePasswordConfirmationInput: ValidationChain[] = [
+    body('password')
+    .notEmpty().withMessage('Password is required')
 ];

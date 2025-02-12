@@ -179,4 +179,8 @@ export class AuthController {
     
     }
 
+    static checkPassword = async (req : Request ,res: Response)  => {  
+        res.send('Password is correct')
+    }
+
 }
