@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 export default function RegisterView() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [_, setIsLoading] = useState(false)
   const initialValues: UserRegistrationForm = {
     name: '',
     email: '',
