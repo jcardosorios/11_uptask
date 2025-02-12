@@ -4,7 +4,7 @@ import Project, { IProject } from '../models/Project'
 declare global {
     namespace Express {
         interface Request {
-            project: IProject
+            project?: IProject
         }
     }
 }
@@ -27,6 +27,24 @@ export async function projectExist(req: Request, res: Response, next: NextFuncti
 
         req.project = project
         
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
+
+export async function validateUserIsManager(req: Request, res: Response, next: NextFunction){
+    try {
+        const { manager, team } = req.project
+        const { id } = req.user
+
+        if(manager.toString() !== id.toString() && !team.includes(id)){
+            res.status(401).json({errors: [{
+                type: "field",
+                msg: 'Unauthorized action',
+            }]})
+            return
+        }
         next()
     } catch (error) {
         next(error)

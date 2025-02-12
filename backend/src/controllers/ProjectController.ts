@@ -1,23 +1,39 @@
 import type { Request, Response } from 'express'
 import Project from '../models/Project'
-import { restart } from 'pm2'
-import { handleError } from '../utils'
+import { handleError } from '../utils/errors'
+
 
 export class ProjectController {  
+    // Create a new project
     static createProject = async (req : Request, res: Response) => {
         const project = new Project(req.body)
+        
+        // Assign manager
+        project.manager = req.user.id
+        
         try {
             await project.save()
-            // await Project.create(req.body)
-            res.send('Project succesfully created')
+            
+            res.send('Project successfully created')
         } catch (error) {
             handleError(res, error, "Failed to create the project")
         }
     }
 
+    // Fetch all manager's projects
     static getAllProjects = async (req : Request, res: Response) => {
+        const { user } = req
         try {
             const projects = await Project.find({
+                $and : [
+                    { isDeleted: false },
+                    {
+                        $or: [
+                            { manager: { $in : user.id} },
+                            { team: { $in: user.id}}
+                        ]
+                    }
+                ],
                 isDeleted: false
             }).populate('tasks')
             res.send(projects)

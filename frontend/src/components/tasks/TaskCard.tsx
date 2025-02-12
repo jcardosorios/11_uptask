@@ -6,12 +6,20 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteTask } from '@/api/TaskAPI'
 import { toast } from 'react-toastify'
+import {useDraggable} from '@dnd-kit/core'
 
 type TypeCardProps = {
     task : Task
+    canEdit: boolean
 }
 
-export default function TaskCard({task} : TypeCardProps) {
+export default function TaskCard({task, canEdit} : TypeCardProps) {
+    // Dragabble card
+    const { attributes, listeners, setNodeRef, transform} = useDraggable({
+        id: task._id
+    })
+
+
     const navigate = useNavigate()
 
     // Get Project ID
@@ -31,12 +39,27 @@ export default function TaskCard({task} : TypeCardProps) {
         }
     
     })
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px,0)`
+    } : undefined
+    
     return (
-    <li className="p-5 bg-white border-slate-300 flex justify-between gap-3">
-        <div className="min-w-0 flex flex-col gap-y-4">
+    <li 
+        {...listeners}
+        {...attributes}
+        ref={setNodeRef}
+        style={style}
+        className="p-5 bg-white border-slate-300 flex justify-between gap-3"
+    >
+        <div 
+
+            className="min-w-0 flex flex-col gap-y-4"
+        >
             <button
                 type="button"
-                className="text-xl font-bold text-slate-600 text-left"
+                onClick={() => navigate(location.pathname + `?viewTask=${task._id}&`) }
+                className="text-xl font-bold text-slate-600 text-left cursor-pointer"
             >{task.taskName}</button>
             <p
                 className="text-slate-500"
@@ -61,23 +84,27 @@ export default function TaskCard({task} : TypeCardProps) {
                                 View Task
                             </button>
                         </MenuItem>
-                        <MenuItem>
-                            <button 
-                            type='button' 
-                            onClick={() => navigate(location.pathname + `?editTask=${task._id}&`) }
-                            className='block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left hover:bg-gray-100 cursor-pointer'>
-                                Edit
-                            </button>
-                        </MenuItem>
+                        { canEdit && (
+                            <>
+                                <MenuItem>
+                                    <button 
+                                    type='button' 
+                                    onClick={() => navigate(location.pathname + `?editTask=${task._id}&`) }
+                                    className='block px-3 py-1 text-sm leading-6 text-gray-900 w-full text-left hover:bg-gray-100 cursor-pointer'>
+                                        Edit
+                                    </button>
+                                </MenuItem>
 
-                        <MenuItem>
-                            <button 
-                                type='button' 
-                                onClick={() => mutate({projectId, taskId :task._id})}
-                                className='block px-3 py-1 text-sm leading-6 text-red-500 w-full text-left hover:bg-gray-100 cursor-pointer'>
-                                Delete
-                            </button>
-                        </MenuItem>
+                                <MenuItem>
+                                    <button 
+                                        type='button' 
+                                        onClick={() => mutate({projectId, taskId :task._id})}
+                                        className='block px-3 py-1 text-sm leading-6 text-red-500 w-full text-left hover:bg-gray-100 cursor-pointer'>
+                                        Delete
+                                    </button>
+                                </MenuItem>
+                            </>
+                        )}
                     </MenuItems>
                 </Transition>
             </Menu>

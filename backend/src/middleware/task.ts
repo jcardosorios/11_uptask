@@ -54,3 +54,23 @@ export async function taskBelongsToProject(req: Request, res: Response, next: Ne
         next(error)
     }
 }
+
+export async function hasAuthorization(req: Request, res: Response, next: NextFunction){
+    try {
+        const { user, project } = req
+
+        if(user.id.toString() != project.manager.toString() ){
+            res.status(400).json({errors: [{
+                type: "field",
+                msg: "Action Invalid. User doesn't have authorization",
+                path: "taskId",
+                location: "params"
+            }]})
+            return
+        }
+ 
+        next()
+    } catch (error) {
+        next(error)
+    }
+}

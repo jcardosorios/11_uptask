@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document, Types, PopulatedDoc } from "mongoose";
-import { ITask } from "./Task";
+import Task, { ITask } from "./Task";
+import { IUser } from "./User";
+import Note from "./Note";
 
 
 export interface IProject extends Document {
@@ -7,6 +9,8 @@ export interface IProject extends Document {
     clientName: string
     description: string
     tasks: PopulatedDoc<ITask & Document>[]
+    manager: PopulatedDoc<IUser & Document>
+    team: PopulatedDoc<IUser & Document>[]
     isDeleted: boolean
     deletedAt: Date | null
 }
@@ -33,9 +37,32 @@ const ProjectSchema: Schema = new Schema({
             ref: 'Task'
         }
     ],
+    manager: {
+        type: Types.ObjectId,
+        ref: 'User'
+    },
+    team: [
+        {
+            type: Types.ObjectId,
+            ref: 'User'
+        }
+    ],
     isDeleted: { type: Boolean, default: false },
     deletedAt: { type: Date, default: null }
 }, { timestamps: true })
+
+// Middleware
+ProjectSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+    const projectId = this._id
+    if(!projectId) return
+
+    const tasks = await Task.find({project: projectId})
+    for (const task of tasks){
+        await Note.deleteMany({task: task._id})
+    }
+    await Task.deleteMany({project: projectId})
+    next()
+});
 
 const Project = mongoose.model<IProject>('Project', ProjectSchema)
 export default Project

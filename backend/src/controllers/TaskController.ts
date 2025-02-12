@@ -1,6 +1,6 @@
 import type { Request, Response} from 'express'
 import Task from '../models/Task'
-import { handleError } from '../utils'
+import { handleError } from '../utils/errors'
 
 export class TaksController {
     static createTask = async (req : Request, res: Response) => {
@@ -34,7 +34,16 @@ export class TaksController {
     }
 
     static getTaskByID = async (req : Request, res: Response) => {
-        const { task } = req
+        const task = await Task.findById(req.task.id)
+                .populate({path:'completedBy.user', select: 'id name email'})
+                .populate({
+                    path:'notes',
+                    options: { sort: { createdAt: -1 }},
+                    populate: {
+                        path: 'createdBy',
+                        select: 'id name email'
+                    }
+                })
         try {
             res.send(task)
         } catch (error) {
@@ -86,11 +95,17 @@ export class TaksController {
     }
 
     static updateStatus = async (req : Request, res: Response) => {
-        const { task } = req
+        const { task, user } = req
         const { status } = req.body
         
         try {
             task.status = status
+
+            const data = {
+                user: user.id,
+                status
+            }
+            task.completedBy.push(data)
             await task.save()
             
             res.send('Status Successfully Updated')
