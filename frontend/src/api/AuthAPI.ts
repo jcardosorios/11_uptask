@@ -76,7 +76,9 @@ export async function resetPasswordWithToken({formData, token}: {formData: NewPa
 export async function getUser() {
     try {
         const { data } = await api.get('/auth/user')
+        console.log(data)
         const response = userSchema.safeParse(data)
+        console.log(response)
         
         if(response.success){
             return response.data
