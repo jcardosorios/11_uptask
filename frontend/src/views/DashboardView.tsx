@@ -18,7 +18,7 @@ export default function DashboardView() {
 
 
   if(isLoading || authLoading) return 'Loading...'
-
+  
   if(data && user) return (
     <>
       <h1 className="text-5xl font-black">My Projects</h1>
