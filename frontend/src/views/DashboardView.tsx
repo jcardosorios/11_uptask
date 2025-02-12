@@ -2,6 +2,7 @@
 
 import { getProjects } from "@/api/ProjectAPI"
 import DashboardProjectItem from "@/components/projects/DashboardProjectItem"
+import DeleteProjectModal from "@/components/projects/DeleteProjectModal"
 import { useAuth } from "@/hooks/useAuth"
 import { useQuery } from "@tanstack/react-query"
 import { Link } from "react-router-dom"
@@ -45,7 +46,7 @@ export default function DashboardView() {
           >Create a new Project</Link>
         </p>
       )}
-
+      <DeleteProjectModal />
     </>
   )
 }

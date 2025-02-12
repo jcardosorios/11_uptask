@@ -1,11 +1,8 @@
 import { Fragment } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Project, User } from '@/types/index'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteProject } from '@/api/ProjectAPI'
-import { toast } from 'react-toastify'
 import { isManager } from '@/utils/policies'
 
 type DashboardProjectItemProps = {
@@ -14,20 +11,10 @@ type DashboardProjectItemProps = {
 }
 
 export default function DashboardProjectItem({project, user} : DashboardProjectItemProps) {
-    const queryClient = useQueryClient()
-
-    // Delete Project
-    const { mutate } = useMutation({
-        mutationFn: deleteProject,
-        onError: (errors: string[]) => {
-            errors.forEach( (message) => toast.error(message))
-        },
-        onSuccess : (data) => {
-            queryClient.invalidateQueries({queryKey: ['projects']})
-            toast.success(data)
-        }
     
-    })
+    const location = useLocation()
+    const navigate = useNavigate()
+    
     
     return (
     <>
@@ -87,7 +74,7 @@ export default function DashboardProjectItem({project, user} : DashboardProjectI
                             <button 
                                 type='button' 
                                 className='block px-3 py-1 text-sm leading-6 w-full text-left text-red-500 cursor-pointer hover:bg-gray-100'
-                                onClick={() => mutate(project._id) }
+                                onClick={ () => navigate(location.pathname + `?deleteProject=${project._id}`) }
                             > Delete</button>
                         </MenuItem>
                         </>
