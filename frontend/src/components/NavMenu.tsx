@@ -10,7 +10,7 @@ type NavMenuProps = {
 }
 
 export default function NavMenu({ name } : NavMenuProps) {
-  const firstName = name.split(' ')[0]
+  const firstName = name ? name.split(' ')[0] : 'User'
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   
