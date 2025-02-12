@@ -29,6 +29,17 @@ export class AuthEmail {
 
         // Read the HTML template file
         const templatePath = path.join(__dirname, './templates/emailConfirmation.html');
+        console.log(templatePath)
+
+
+        fs.readdir(templatePath, (err, files) => {
+            if (err) {
+              console.error('Error leyendo la carpeta:', err);
+            } else {
+              console.log('Archivos en la carpeta:', files);
+            }
+          });
+
         const emailTemplate = fs.readFileSync(templatePath, 'utf8');
 
         const url = `${process.env.FRONTEND_URL}/auth/confirm-account`
