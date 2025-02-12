@@ -99,7 +99,20 @@ export const validateCreateNote: ValidationChain[] = [
 
 export const validateProfileInput: ValidationChain[] = [
     body('name')
-    .notEmpty().withMessage('Name is required'),
+        .notEmpty().withMessage('Name is required'),
     body('email')
         .isEmail().withMessage('Email must be valid'),
+];
+
+export const validatePasswordInput: ValidationChain[] = [
+    body('password')
+        .notEmpty().withMessage('Password is required'),
+    body('new_password')
+        .isLength({ min: 8}).withMessage('New Password must be at least 8 characters long'),
+    body('new_password_confirmation').custom((value, { req }) => {
+        if(value !== req.body.new_password){
+            throw new Error('Passwords do not match')
+        }
+    return true
+}),
 ];

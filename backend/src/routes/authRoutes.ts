@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
-import { handleInputErrors, validateCreateAccount, validateEmailInput, validateLoginInput, validateProfileInput, validateResetPasswordInput, validateTokenInput } from '../middleware/validation'
+import { handleInputErrors, validateCreateAccount, validateEmailInput, validateLoginInput, validatePasswordInput, validateProfileInput, validateResetPasswordInput, validateTokenInput } from '../middleware/validation'
 import { tokenExist, checkUserNotConfirmed, validatePassword, checkUserConfirmed, authenticate, validateUser, validateUserExist } from '../middleware/auth'
 
 const router = Router()
@@ -79,5 +79,15 @@ router.put('/profile',
     validateUserExist,
     AuthController.updateProfile
 )
+
+// Change password
+router.post('/update-password',
+    authenticate,
+    validatePasswordInput,
+    handleInputErrors,
+    validatePassword,
+    AuthController.updatePassword
+)
+
 
 export default router

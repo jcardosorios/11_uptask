@@ -163,5 +163,20 @@ export class AuthController {
             handleError(res, error, "Failed to update profile")
         }
     }
+    
+    static updatePassword = async (req : Request ,res: Response)  => {
+        
+        const { new_password} = req.body
+        const { user } = req
+        
+        try {
+            user.password = await hashPassword(new_password)
+            await user.save()
+            res.send('Password updated succesfully')
+        } catch (error) {
+            handleError(res, error, "Failed to change password")
+        }
+    
+    }
 
 }
