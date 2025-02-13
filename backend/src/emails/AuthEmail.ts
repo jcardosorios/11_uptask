@@ -28,7 +28,7 @@ export class AuthEmail {
     static sendConfirmationEmail = async (user : IEmail) => {
 
         // Read the HTML template file
-        const templatePath = path.join(__dirname, 'emails/templates/emailConfirmation.html');
+        const templatePath = path.join(__dirname, 'templates/emailConfirmation.html');
         if (fs.existsSync(templatePath)) {
             console.log('El archivo existe:', templatePath);
         } else {
