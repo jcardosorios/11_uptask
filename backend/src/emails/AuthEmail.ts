@@ -28,12 +28,12 @@ export class AuthEmail {
     static sendConfirmationEmail = async (user : IEmail) => {
 
         // Read the HTML template file
-        const templatePath = path.join(__dirname, './templates/emailConfirmation.html');
-        console.log('Ruta del archivo:', __dirname);
-
-        // Si quieres la ruta completa del archivo, puedes usar path.join
-        const filePath = path.join(__dirname, 'AuthEmail.js');
-        console.log('Ruta completa del archivo:', filePath);
+        const templatePath = path.join(__dirname, 'emails/templates/emailConfirmation.html');
+        if (fs.existsSync(templatePath)) {
+            console.log('El archivo existe:', templatePath);
+        } else {
+            console.log('El archivo no existe:', templatePath);
+        }
 
 
         const emailTemplate = fs.readFileSync(templatePath, 'utf8');
