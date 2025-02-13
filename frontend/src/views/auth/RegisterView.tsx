@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query'
 import { UserRegistrationForm } from "@/types/index";
 import ErrorMessage from "@/components/ErrorMessage";
@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 export default function RegisterView() {
+    const navigate = useNavigate()
+
   const [_, setIsLoading] = useState(false)
   const initialValues: UserRegistrationForm = {
     name: '',
@@ -26,6 +28,9 @@ export default function RegisterView() {
     onSuccess: (data) => {
         toast.success(data)
         reset()
+        setTimeout(() => {
+            navigate('/')
+        }, 3000)
     },
     onMutate: () => {
         setIsLoading(true)
@@ -44,10 +49,10 @@ export default function RegisterView() {
 
   return (
     <>
-        <h1 className="text-5xl font-black text-white">Crear Cuenta</h1>
+        <h1 className="text-5xl font-black text-white">Create account</h1>
         <p className="text-2xl font-light text-white mt-5">
-            Llena el formulario para {''}
-            <span className=" text-fuchsia-500 font-bold"> crear tu cuenta</span>
+            Fill this form to {''}
+            <span className=" text-fuchsia-500 font-bold"> create your account</span>
         </p>
 
         <form
@@ -83,7 +88,7 @@ export default function RegisterView() {
         <div className="flex flex-col gap-5">
             <label
                 className="font-normal text-2xl"
-            >Nombre</label>
+            >Name</label>
             <div>
                 <input
                     type="name"
@@ -146,7 +151,7 @@ export default function RegisterView() {
 
         <input
             type="submit"
-            value='Registrarme'
+            value='Register'
             className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
         />
       </form>
