@@ -44,19 +44,19 @@ const seedDatabase = async () => {
     try {
         const users = await User.insertMany([
             {
-                email: 'juako.r@gmail.com',
-                password: await hashPassword('Juako1990'),
+                email: 'email1@mail.com',
+                password: await hashPassword('87654321'),
                 name: 'Joaquin Rios',
                 confirmed: true
             },
             {
-                email: 'joaquin.rios.cardoso@gmail.com',
+                email: 'email2@gmail.com',
                 password: await hashPassword('12345678'),
                 name: 'Filomeno Gutierrez',
                 confirmed: true
             },
             {
-                email: 'joaquin.cardoso.r@gmail.com',
+                email: 'email3@gmail.com',
                 password: await hashPassword('12345678'),
                 name: 'Eustaquio Ramirez',
                 confirmed: true
