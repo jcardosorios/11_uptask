@@ -4,8 +4,28 @@ import { getProjects } from "@/api/ProjectAPI"
 import DashboardProjectItem from "@/components/projects/DashboardProjectItem"
 import DeleteProjectModal from "@/components/projects/DeleteProjectModal"
 import { useAuth } from "@/hooks/useAuth"
+import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStorage"
 import { useQuery } from "@tanstack/react-query"
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
+
+// Initial Demo Data Seeding Logic
+function seedInitialDemoData() {
+  const existingProjects = getDemoProjects();
+  if (existingProjects.length === 0) {
+    const initialProjects = [
+      {
+        _id: generateId(),
+        projectName: "My First Demo Project",
+        clientName: "Demo Client Inc.",
+        description: "This is a sample project for the demo mode.",
+        tasks: [],
+        manager: "demo-user-001",
+      },
+    ];
+    saveDemoProjects(initialProjects);
+  }
+}
 
 
 export default function DashboardView() {
@@ -15,6 +35,10 @@ export default function DashboardView() {
     queryKey: ['projects'],
     queryFn: getProjects
   })
+
+  useEffect(() => {
+    seedInitialDemoData(); // Seed data on component mount if needed
+  }, []);
 
 
   if(isLoading || authLoading) return 'Loading...'

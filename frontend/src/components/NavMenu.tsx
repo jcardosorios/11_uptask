@@ -15,11 +15,16 @@ export default function NavMenu({ name } : NavMenuProps) {
   const navigate = useNavigate()
   
   const logout = () => {
-    localStorage.removeItem('AUTH_TOKEN')
-    queryClient.removeQueries({queryKey:['user']})
-    queryClient.removeQueries({queryKey:['projects']})
-    navigate('/auth/login')
+    // localStorage.removeItem('AUTH_TOKEN')
+    // queryClient.removeQueries({queryKey:['user']})
+    // queryClient.removeQueries({queryKey:['projects']})
+    // navigate('/auth/login')
+    localStorage.removeItem('uptask_demo_projects');
+    localStorage.removeItem('uptask_demo_user_profile');
 
+    queryClient.invalidateQueries({ queryKey: ['user'] }); 
+    queryClient.invalidateQueries({ queryKey: ['projects'] });
+    navigate('/')
   }
   return (
     <Popover className="relative">
