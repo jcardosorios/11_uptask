@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+**/node_modules/
+
+# Build directories
+dist/
+build/
+.vite/
+out/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editor-specific files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# macOS system files
+._*
+
+# Coverage files
+coverage/
+
+# Debugging files
+*.stackdump
+
+# Optional npm cache directory
+.npm
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Parcel cache
+.cache/
+
+# JetBrains IDE files
+.idea/
+
+# Storybook files
+.storybook/
+
+# Other
+*.bak
+*.orig
