@@ -1,8 +1,4 @@
 const DEMO_PROJECTS_KEY = 'uptask_demo_projects';
-const DEMO_TASKS_KEY = 'uptask_demo_tasks';
-const DEMO_TEAM_KEY = 'uptask_demo_team';
-const DEMO_NOTES_KEY = 'uptask_demo_notes';
-const DEMO_PROFILE_KEY = 'uptask_demo_profile';
 const DEMO_USER_PROFILE_KEY = 'uptask_demo_user_profile';
 
 export function generateId() {
