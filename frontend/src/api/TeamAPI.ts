@@ -1,7 +1,7 @@
 
 // import api from "@/lib/axios";
 import { handleErrorsAxios } from "@/lib/handleErrors";
-import { Project, TeamMember, TeamMemberFormData, teamMemberSchema, teamSchema } from "../types";
+import { Project, TeamMember, TeamMemberFormData } from "../types";
 import { getDemoProjects, saveDemoProjects } from "@/utils/localStorage";
 
 type TeamAPIType = {
@@ -77,7 +77,7 @@ export async function getProjectTeam(projectId: Project['_id']) {
         // if(response.success){
         //     return response.data
         // }
-        const projects = getDemoProjects();
+        const projects = getDemoProjects() as Project[];
         const project = projects.find((p: Project) => p._id === projectId);
         if (!project) {
             throw [`Project with ID ${projectId} not found (Demo Mode)`];

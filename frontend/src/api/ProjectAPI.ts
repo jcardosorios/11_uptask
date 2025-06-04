@@ -14,6 +14,7 @@ export async function createProject( formData : ProjectFormData) {
             _id: generateId(),
             ...formData,
             tasks: [],
+            team: [],
             manager: 'demo-user-001'
         };
         projects.push(newProject);

@@ -8,13 +8,14 @@ import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { toast } from "react-toastify"
 
 
+
 export default function ProjectTeamView() {
     const navigate = useNavigate()
     const params = useParams()
     const projectId = params.projectId!
 
     // Get members of team Query
-    const { data, isLoading, isError} = useQuery({
+    const { data , isLoading, isError} = useQuery({
         queryKey: ['projectTeam', projectId],
         queryFn: () => getProjectTeam(projectId),
         retry: false

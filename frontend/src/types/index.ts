@@ -74,31 +74,6 @@ export type Task = z.infer<typeof taskSchema>
 export type TaskFormData = Pick<Task, 'taskName' | 'description' >
 
 
-// Projects
-
-export const projectSchema = z.object({
-    _id: z.string(),
-    projectName: z.string(),
-    clientName: z.string(),
-    description: z.string(),
-    tasks: z.array(taskSchema),
-    manager: z.string(userSchema.pick({_id: true}))
-})
-
-export const dashboardProjectSchema = z.array(
-    projectSchema.pick({
-        _id: true,
-        projectName: true,
-        clientName: true,
-        description: true,
-        tasks: true,
-        manager: true
-    })
-)
-export type Project = z.infer<typeof projectSchema>
-export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
-export type DashboardProject = z.infer<typeof dashboardProjectSchema>
-
 /** Team */
 export const teamMemberSchema = userSchema.pick({
     name: true,
@@ -111,3 +86,30 @@ export const teamSchema = z.array(teamMemberSchema)
 export type TeamMember = z.infer<typeof teamMemberSchema>
 export type TeamMemberFormData = Pick<TeamMember, 'email'>
 export type Team = z.infer<typeof teamSchema>
+
+// Projects
+
+export const projectSchema = z.object({
+    _id: z.string(),
+    projectName: z.string(),
+    clientName: z.string(),
+    description: z.string(),
+    tasks: z.array(taskSchema),
+    manager: z.string(userSchema.pick({_id: true})),
+    team: z.array(teamMemberSchema)
+})
+
+export const dashboardProjectSchema = z.array(
+    projectSchema.pick({
+        _id: true,
+        projectName: true,
+        clientName: true,
+        description: true,
+        tasks: true,
+        manager: true,
+        team: true
+    })
+)
+export type Project = z.infer<typeof projectSchema>
+export type ProjectFormData = Pick<Project, 'projectName' | 'clientName' | 'description'>
+export type DashboardProject = z.infer<typeof dashboardProjectSchema>
