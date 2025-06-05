@@ -8,19 +8,21 @@ import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStor
 import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
+import { Project } from "../types"
 
 // Initial Demo Data Seeding Logic
 function seedInitialDemoData() {
   const existingProjects = getDemoProjects();
   if (existingProjects.length === 0) {
-    const initialProjects = [
+    const initialProjects: Project[] = [
       {
-        _id: generateId(),
+        _id: generateId() as string,
         projectName: "My First Demo Project",
         clientName: "Demo Client Inc.",
         description: "This is a sample project for the demo mode.",
         tasks: [],
         manager: "demo-user-001",
+        team: [],
       },
     ];
     saveDemoProjects(initialProjects);
