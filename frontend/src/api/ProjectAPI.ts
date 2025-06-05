@@ -31,6 +31,7 @@ export async function getProjects() {
         // const response = dashboardProjectSchema.safeParse(data)
         const projects = getDemoProjects();
         const response = dashboardProjectSchema.safeParse(projects)
+        console.log(response)
         if(response.success){
             return response.data
         } else {
