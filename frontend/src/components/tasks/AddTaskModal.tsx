@@ -4,8 +4,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import TaskForm from './TaskForm';
-import { TaskFormData } from '@/types/index';
-import { createTask } from '@/api/TaskAPI';
+import { TaskFormData } from '../../types/index';
+import { createTask } from '../../api/TaskAPI';
 import { toast } from 'react-toastify';
 
 export default function AddTaskModal() {

@@ -1,6 +1,6 @@
 // import api from '@/lib/axios'
 import { CheckPasswordForm, ConfirmToken, ForgotPasswordForm, NewPasswordForm, RequestConfirmationCodeForm, UserLoginForm, UserRegistrationForm, userSchema } from '../types'
-import { handleErrorsAxios } from '@/lib/handleErrors'
+import { handleErrorsAxios } from '../lib/handleErrors'
 
 const DEMO_USER_DATA = {
     _id: 'demo-user-001',

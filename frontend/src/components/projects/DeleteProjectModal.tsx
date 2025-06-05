@@ -4,10 +4,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import ErrorMessage from "../ErrorMessage";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteProject } from '@/api/ProjectAPI';
+import { deleteProject } from '../../api/ProjectAPI';
 import { toast } from 'react-toastify';
-import { CheckPasswordForm } from '@/types/index';
-import { checkPassword } from '@/api/AuthAPI';
+import { CheckPasswordForm } from '../../types/index';
+import { checkPassword } from '../../api/AuthAPI';
 
 export default function DeleteProjectModal() {
     const initialValues : CheckPasswordForm= {

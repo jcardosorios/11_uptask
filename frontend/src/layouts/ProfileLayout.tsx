@@ -1,4 +1,4 @@
-import Tabs from "@/components/profile/Tabs";
+import Tabs from "../components/profile/Tabs";
 import { Outlet } from "react-router-dom";
 
 

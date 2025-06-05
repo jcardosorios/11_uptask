@@ -1,10 +1,10 @@
 
 
-import { getProjects } from "@/api/ProjectAPI"
-import DashboardProjectItem from "@/components/projects/DashboardProjectItem"
-import DeleteProjectModal from "@/components/projects/DeleteProjectModal"
-import { useAuth } from "@/hooks/useAuth"
-import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStorage"
+import { getProjects } from "../api/ProjectAPI"
+import DashboardProjectItem from "../components/projects/DashboardProjectItem"
+import DeleteProjectModal from "../components/projects/DeleteProjectModal"
+import { useAuth } from "../hooks/useAuth"
+import { generateId, getDemoProjects, saveDemoProjects } from "../utils/localStorage"
 import { useQuery } from "@tanstack/react-query"
 import { useEffect } from "react"
 import { Link } from "react-router-dom"

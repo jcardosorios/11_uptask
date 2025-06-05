@@ -1,9 +1,9 @@
 import { Dispatch } from 'react';
 import { Link } from 'react-router-dom';
 import { PinInput, PinInputField } from '@chakra-ui/pin-input';
-import { ConfirmToken } from '@/types/index';
+import { ConfirmToken } from '../../types/index';
 import { useMutation } from '@tanstack/react-query';
-import { validateToken } from '@/api/AuthAPI';
+import { validateToken } from '../../api/AuthAPI';
 import { toast } from 'react-toastify';
 
 type NewPasswordTokenProps = {

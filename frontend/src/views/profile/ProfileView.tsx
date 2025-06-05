@@ -1,5 +1,5 @@
-import ProfileForm from "@/components/profile/ProfileForm"
-import { useAuth } from "@/hooks/useAuth"
+import ProfileForm from "../../components/profile/ProfileForm"
+import { useAuth } from "../../hooks/useAuth"
 
 
 export default function ProfileView() {

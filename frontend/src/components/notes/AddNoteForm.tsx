@@ -1,9 +1,9 @@
-import { NoteFormData } from '@/types/index'
+import { NoteFormData } from '../../types/index'
 import { useForm } from 'react-hook-form'
 import ErrorMessage from '../ErrorMessage'
 import { useLocation, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createNote } from '@/api/NoteAPI'
+import { createNote } from '../../api/NoteAPI'
 import { toast } from 'react-toastify'
 
 export default function AddNoteForm() {

@@ -1,8 +1,8 @@
 
 // import api from "@/lib/axios";
-import { handleErrorsAxios } from "@/lib/handleErrors";
+import { handleErrorsAxios } from "../lib/handleErrors";
 import { Project, TeamMember, TeamMemberFormData } from "../types";
-import { getDemoProjects, saveDemoProjects } from "@/utils/localStorage";
+import { getDemoProjects, saveDemoProjects } from "../utils/localStorage";
 
 type TeamAPIType = {
     formData : TeamMemberFormData

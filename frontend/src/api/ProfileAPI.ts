@@ -1,7 +1,7 @@
 // import api from '@/lib/axios'
-import { handleErrorsAxios } from '@/lib/handleErrors'
+import { handleErrorsAxios } from '../lib/handleErrors'
 import { ChangePasswordForm, UserProfileForm } from '../types'
-import { getDemoUserProfile, saveDemoUserProfile } from '@/utils/localStorage'
+import { getDemoUserProfile, saveDemoUserProfile } from '../utils/localStorage'
 
 
 export async function updateProfile(formData : UserProfileForm) {

@@ -1,4 +1,4 @@
-import { Task } from "@/types/index";
+import { Task } from "../../types/index";
 import AddNoteForm from "./AddNoteForm";
 import NoteDetail from "./NoteDetail";
 

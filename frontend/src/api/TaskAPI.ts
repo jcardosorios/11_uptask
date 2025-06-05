@@ -1,7 +1,7 @@
 // import api from "@/lib/axios";
-import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStorage";
+import { generateId, getDemoProjects, saveDemoProjects } from "../utils/localStorage";
 import { Project, Task, TaskFormData, TaskStatus } from "../types";
-import { handleErrorsAxios } from "@/lib/handleErrors";
+import { handleErrorsAxios } from "../lib/handleErrors";
 
 type TaskAPI = {
     formData: TaskFormData

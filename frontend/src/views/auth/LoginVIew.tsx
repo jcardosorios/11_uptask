@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { UserLoginForm } from "@/types/index";
-import ErrorMessage from "@/components/ErrorMessage";
+import { UserLoginForm } from "../../types/index";
+import ErrorMessage from "../../components/ErrorMessage";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { loginAccount } from "@/api/AuthAPI";
+import { loginAccount } from "../../api/AuthAPI";
 import { toast } from "react-toastify";
 
 export default function LoginView() {

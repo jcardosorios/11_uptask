@@ -1,8 +1,8 @@
 
 // import api from "@/lib/axios";
-import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStorage";
+import { generateId, getDemoProjects, saveDemoProjects } from "../utils/localStorage";
 import { dashboardProjectSchema, Project, ProjectFormData, projectSchema } from "../types";
-import { handleErrorsAxios } from "@/lib/handleErrors";
+import { handleErrorsAxios } from "../lib/handleErrors";
 
 
 export async function createProject( formData : ProjectFormData) {

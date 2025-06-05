@@ -1,8 +1,8 @@
 
 // import api from "@/lib/axios";
-import { handleErrorsAxios } from "@/lib/handleErrors";
+import { handleErrorsAxios } from "../lib/handleErrors";
 import { Note, NoteFormData, Project, Task } from "../types";
-import { generateId, getDemoProjects, saveDemoProjects } from "@/utils/localStorage";
+import { generateId, getDemoProjects, saveDemoProjects } from "../utils/localStorage";
 
 type NoteAPIType = {
     formData : NoteFormData

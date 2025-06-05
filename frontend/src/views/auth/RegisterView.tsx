@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query'
-import { UserRegistrationForm } from "@/types/index";
-import ErrorMessage from "@/components/ErrorMessage";
-import { createAccount } from "@/api/AuthAPI";
+import { UserRegistrationForm } from "../../types/index";
+import ErrorMessage from "../../components/ErrorMessage";
+import { createAccount } from "../../api/AuthAPI";
 import { toast } from "react-toastify";
 import { useState } from "react";
 

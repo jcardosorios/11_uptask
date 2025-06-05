@@ -1,11 +1,11 @@
 import { DndContext, DragEndEvent, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
-import { Project, Task, TaskStatus } from "@/types/index"
+import { Project, Task, TaskStatus } from "../../types/index"
 import TaskCard from "./TaskCard"
-import { statusTranslations } from "@/locales/en"
+import { statusTranslations } from "../../locales/en"
 import DropTask from "./DropTask"
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { updateStatus } from '@/api/TaskAPI'
+import { updateStatus } from '../../api/TaskAPI'
 import { useParams } from 'react-router-dom'
 
 type TaskListProps = {

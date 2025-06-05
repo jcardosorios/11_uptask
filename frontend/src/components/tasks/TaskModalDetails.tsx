@@ -2,11 +2,11 @@ import { Fragment } from 'react';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getTaskById, updateStatus } from '@/api/TaskAPI';
+import { getTaskById, updateStatus } from '../../api/TaskAPI';
 import { toast } from 'react-toastify';
-import { formatDate } from '@/utils/utils';
-import { statusTranslations } from "@/locales/en"
-import { TaskStatus } from '@/types/index';
+import { formatDate } from '../../utils/utils';
+import { statusTranslations } from "../../locales/en"
+import { TaskStatus } from '../../types/index';
 import NotesPanel from '../notes/NotesPanel';
 
 

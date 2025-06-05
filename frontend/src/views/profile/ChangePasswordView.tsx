@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
-import ErrorMessage from "@/components/ErrorMessage"
-import { ChangePasswordForm } from "@/types/index";
+import ErrorMessage from "../../components/ErrorMessage"
+import { ChangePasswordForm } from "../../types/index";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { changePassword } from "@/api/ProfileAPI";
+import { changePassword } from "../../api/ProfileAPI";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid"

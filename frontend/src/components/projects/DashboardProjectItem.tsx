@@ -2,8 +2,8 @@ import { Fragment } from 'react'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Project, User } from '@/types/index'
-import { isManager } from '@/utils/policies'
+import { Project, User } from '../../types/index'
+import { isManager } from '../../utils/policies'
 
 type DashboardProjectItemProps = {
     project: Project

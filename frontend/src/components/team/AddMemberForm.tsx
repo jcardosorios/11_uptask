@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ErrorMessage from "../ErrorMessage";
-import { TeamMemberFormData, User } from "@/types/index";
-import { findUserByEmail } from "@/api/TeamAPI";
+import { TeamMemberFormData, User } from "../../types/index";
+import { findUserByEmail } from "../../api/TeamAPI";
 import SearchResult from "./SearchResult";
 import { toast } from "react-toastify";
 

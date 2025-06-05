@@ -1,6 +1,6 @@
-import NewPasswordForm from "@/components/auth/NewPasswordForm"
-import NewPasswordToken from "@/components/auth/NewPasswordToken"
-import { ConfirmToken } from "@/types/index"
+import NewPasswordForm from "../../components/auth/NewPasswordForm"
+import NewPasswordToken from "../../components/auth/NewPasswordToken"
+import { ConfirmToken } from "../../types/index"
 import { useState } from "react"
 
 export default function ResetPasswordView() {

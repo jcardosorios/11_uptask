@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { RequestConfirmationCodeForm } from "../../types";
-import ErrorMessage from "@/components/ErrorMessage";
+import ErrorMessage from "../../components/ErrorMessage";
 import { useMutation } from "@tanstack/react-query";
-import { requestConfirmationCode } from "@/api/AuthAPI";
+import { requestConfirmationCode } from "../../api/AuthAPI";
 import { toast } from "react-toastify";
 
 export default function RequestNewCodeView() {

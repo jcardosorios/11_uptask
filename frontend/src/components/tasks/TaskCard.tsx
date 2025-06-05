@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
-import { Task } from "@/types/index"
+import { Task } from "../../types/index"
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteTask } from '@/api/TaskAPI'
+import { deleteTask } from '../../api/TaskAPI'
 import { toast } from 'react-toastify'
 import {useDraggable} from '@dnd-kit/core'
 
